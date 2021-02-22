@@ -7,46 +7,55 @@ import androidx.annotation.RequiresApi;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 
 public class Attendance {
     String id;
-    LocalTime start_time;
-    LocalTime end_time;
+    String title;
+    String start_time;
+    String end_time;
     Date day;
+    String description;
     UserProfile creator;
     ArrayList<User> members;
 
-    @SuppressLint("SimpleDateFormat")
-    private Date parseDate(String date) {
-        try {
-            return new SimpleDateFormat("yyyy-MM-dd").parse(date);
-        } catch (ParseException e) {
-            return null;
+    private Date getDate(String date) throws ParseException {
+        String pattern = "yyyy-MM-dd";
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        return simpleDateFormat.parse(date);
+    }
+
+    public Attendance(String id, String title, String start_time, String end_time, String day, String description, UserProfile creator, ArrayList<User> members)  {
+        this.id = id;
+        this.title = title;
+        this.start_time = start_time;
+        this.end_time = end_time;
+        this.description = description;
+        this.creator = creator;
+        this.members = members;
+        try{
+            this.day = getDate(day);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public Attendance(String id, String start_time, String end_time, String day, UserProfile creator, User[] members) {
+    public Attendance(String id, String title, String start_time, String end_time, String day, String description, UserProfile creator) {
         this.id = id;
-        this.start_time = (LocalTime.parse(start_time));
-        this.end_time = LocalTime.parse(end_time);
-        this.creator = creator;
-        this.members = new ArrayList<>(Arrays.asList(members));
-        this.day = parseDate(day);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public Attendance(String id, String start_time, String end_time, String day, UserProfile creator) {
-        this.id = id;
-        this.start_time = (LocalTime.parse(start_time));
-        this.end_time = LocalTime.parse(end_time);
+        this.title = title;
+        this.start_time = start_time;
+        this.end_time = end_time;
+        this.description = description;
         this.creator = creator;
         this.members = new ArrayList<>();
-        this.day = parseDate(day);
+        try{
+            this.day = getDate(day);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public String getId() {
@@ -57,19 +66,27 @@ public class Attendance {
         this.id = id;
     }
 
-    public LocalTime getStart_time() {
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getStart_time() {
         return start_time;
     }
 
-    public void setStart_time(LocalTime start_time) {
+    public void setStart_time(String start_time) {
         this.start_time = start_time;
     }
 
-    public LocalTime getEnd_time() {
+    public String getEnd_time() {
         return end_time;
     }
 
-    public void setEnd_time(LocalTime end_time) {
+    public void setEnd_time(String end_time) {
         this.end_time = end_time;
     }
 
@@ -79,6 +96,14 @@ public class Attendance {
 
     public void setDay(Date day) {
         this.day = day;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public UserProfile getCreator() {
@@ -101,9 +126,11 @@ public class Attendance {
     public String toString() {
         return "Attendance{" +
                 "id='" + id + '\'' +
+                ", title='" + title + '\'' +
                 ", start_time=" + start_time +
                 ", end_time=" + end_time +
                 ", day=" + day +
+                ", description='" + description + '\'' +
                 ", creator=" + creator +
                 ", members=" + members +
                 '}';

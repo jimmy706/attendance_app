@@ -152,6 +152,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/custom_button"
                 android:text="@string/register_text"
+                android:textColor="@color/white"
                 android:id="@+id/sign_up_btn"/>
         </LinearLayout>
     </ScrollView>

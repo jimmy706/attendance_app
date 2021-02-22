@@ -19,4 +19,11 @@
     <string name="introduce_app_title">
         Attendance App
     </string>
+    <string name="newest_attendance">
+        Newest
+    </string>
+    <string name="my_attendance">
+        My attendance
+    </string>
+    <string name="view_registered_attendance_action">Registered</string>
 </resources>

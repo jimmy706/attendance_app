@@ -18,8 +18,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:text="Home"
-            android:textSize="18dp"
-            android:textStyle="bold"
+            style="@style/activity_title"
             />
 
         <ImageButton
@@ -31,4 +30,46 @@
             android:background="@color/transparent"
             />
     </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RadioGroup
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:id="@+id/view_attendance_state">
+
+            <RadioButton
+                android:id="@+id/view_newest"
+                android:layout_width="wrap_content"
+                android:layout_height="33dp"
+                android:background="@drawable/radio_selector"
+                android:button="@color/transparent"
+                android:checked="true"
+                android:paddingHorizontal="10dp"
+                android:text="@string/newest_attendance"
+                android:textColor="@drawable/radio_text" />
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="33dp"
+                android:text="@string/view_registered_attendance_action"
+                android:textAllCaps="false"
+                android:paddingHorizontal="10dp"
+                android:layout_marginLeft="10dp"
+                android:id="@+id/view_registered"
+                android:button="@color/transparent"
+                android:background="@drawable/radio_selector"
+                android:textColor="@drawable/radio_text"/>
+        </RadioGroup>
+        <ListView
+            android:id="@+id/newest_attendance_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="0dp"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp" />
+    </LinearLayout>
 </LinearLayout>

@@ -40,7 +40,8 @@
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:orientation="horizontal"
-            android:id="@+id/view_attendance_state">
+            android:id="@+id/view_attendance_state"
+            android:layout_marginBottom="15dp">
 
             <RadioButton
                 android:id="@+id/view_newest"

@@ -4,15 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AttendanceDetail"
-    android:orientation="vertical"
-    >
+    tools:context=".AttendanceDetailActivity"
+    android:orientation="vertical">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingHorizontal="15dp"
-        android:paddingVertical="10dp">
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="15dp">
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -32,4 +32,18 @@
             android:layout_centerVertical="true"
             />
     </RelativeLayout>
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+         />
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="15dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+
 </LinearLayout>

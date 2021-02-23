@@ -47,7 +47,7 @@ public class Home extends AppCompatActivity {
 
         attendanceListView.setOnItemClickListener((parent, view, position, id) -> {
             Attendance attendance = attendances.get(position);
-            Intent intent = new Intent(Home.this, AttendanceDetail.class);
+            Intent intent = new Intent(Home.this, AttendanceDetailActivity.class);
             Bundle bundle = new Bundle();
             bundle.putString("attendance_id", attendance.getId());
             intent.putExtras(bundle);

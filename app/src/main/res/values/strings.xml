@@ -11,7 +11,8 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
-    <string name="missing_account_question">Not create you yet? </string>
+    <string name="missing_account_question">Not create your account yet? </string>
+    <string name="has_account_question">Already have account? </string>
     <string name="prompt_first_name">First name</string>
     <string name="prompt_last_name">Last name</string>
     <string name="prompt_email">Email</string>
@@ -26,4 +27,12 @@
         My attendance
     </string>
     <string name="view_registered_attendance_action">Registered</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_attendance_detail">AttendanceDetailActivity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    <string name="attendance_tab_1">About</string>
+    <string name="attendance_tab_2">Members</string>
+    <string name="join_attendance">Join attendance</string>
 </resources>

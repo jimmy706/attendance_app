@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import com.ct274.attendanceapp.AttendanceDetailFragment;
+import com.ct274.attendanceapp.AttendanceMembersFragment;
 import com.ct274.attendanceapp.R;
 
 /**
@@ -19,10 +21,13 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     @StringRes
     private static final int[] TAB_TITLES = new int[]{R.string.attendance_tab_1, R.string.attendance_tab_2};
     private final Context mContext;
-
-    public SectionsPagerAdapter(Context context, FragmentManager fm) {
+    private AttendanceDetailFragment attendanceDetailFragment;
+    private AttendanceMembersFragment attendanceMembersFragment;
+    public SectionsPagerAdapter(Context context, FragmentManager fm, AttendanceDetailFragment attendanceDetailFragment, AttendanceMembersFragment attendanceMembersFragment) {
         super(fm);
         mContext = context;
+        this.attendanceDetailFragment = attendanceDetailFragment;
+        this.attendanceMembersFragment = attendanceMembersFragment;
     }
 
     @Override
@@ -31,9 +36,9 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         // Return a PlaceholderFragment (defined as a static inner class below).
         switch (position){
             case 1:
-                return new AttendanceDetailPlaceholder2();
+                return attendanceMembersFragment;
             default:
-                return new AttendanceDetailPlaceholder1();
+                return attendanceDetailFragment;
         }
     }
 
@@ -48,4 +53,6 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         // Show 2 total pages.
         return 2;
     }
+
+
 }

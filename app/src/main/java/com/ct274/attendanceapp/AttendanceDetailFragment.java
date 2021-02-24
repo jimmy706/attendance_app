@@ -1,64 +1,95 @@
 package com.ct274.attendanceapp;
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AttendanceDetailFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.google.android.gms.vision.barcode.Barcode;
+
+import org.jetbrains.annotations.NotNull;
+
 public class AttendanceDetailFragment extends Fragment {
+    private String [] makeARoleTypes = new String[] {"Select joined members", "Scan barcode"};
+    private static final int REQUEST_CAMERA_PERMISSION = 201;
+    private String attendanceId;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public AttendanceDetailFragment() {
+    public AttendanceDetailFragment(String attendanceId) {
         // Required empty public constructor
+        this.attendanceId = attendanceId;
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AttendanceDetailFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AttendanceDetailFragment newInstance(String param1, String param2) {
-        AttendanceDetailFragment fragment = new AttendanceDetailFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+
+    private void requestCameraPermission() {
+        if(ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            startActivity(new Intent(getContext(), BarcodeScanActivity.class));
+        }
+        else {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
+        }
+    }
+
+    private void startBarcodeScanActivity() {
+        Intent intent = new Intent(getActivity(), BarcodeScanActivity.class);
+        Bundle sendData = new Bundle();
+
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_attendance_detail, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_attendance_detail, container, false);
+
+
+        Button toggleJoinAttendanceBtn = rootView.findViewById(R.id.join_attendance_btn);
+        System.out.println(toggleJoinAttendanceBtn);
+        if(toggleJoinAttendanceBtn != null) {
+            toggleJoinAttendanceBtn.setOnClickListener(v -> {
+                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(v.getContext());
+                alertBuilder.setTitle("Pick a method");
+                alertBuilder.setItems(makeARoleTypes, (dialog, which) -> {
+                    switch (which){
+                        case 1:
+                            requestCameraPermission();
+                            break;
+                        default:
+                            Toast.makeText(getContext(), makeARoleTypes[which], Toast.LENGTH_SHORT).show();
+                            break;
+                    }
+                });
+                alertBuilder.show();
+            });
+        }
+
+        return rootView;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode == REQUEST_CAMERA_PERMISSION) {
+            // If request is cancelled, the result arrays are empty.
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startBarcodeScanActivity();
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }

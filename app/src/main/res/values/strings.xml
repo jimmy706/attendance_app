@@ -34,5 +34,5 @@
     <string name="tab_text_2">Tab 2</string>
     <string name="attendance_tab_1">About</string>
     <string name="attendance_tab_2">Members</string>
-    <string name="join_attendance">Join attendance</string>
+    <string name="join_attendance">Make a role call</string>
 </resources>

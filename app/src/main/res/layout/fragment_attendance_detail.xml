@@ -86,7 +86,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/join_attendance"
-            android:visibility="gone"/>
+            android:id="@+id/join_attendance_btn"
+            android:layout_marginTop="15dp"
+            />
     </LinearLayout>
 
 </ScrollView>

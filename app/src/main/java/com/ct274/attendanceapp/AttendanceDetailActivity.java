@@ -33,7 +33,7 @@ public class AttendanceDetailActivity extends AppCompatActivity {
             fragmentArgs.putString("attendance_id", attendanceId);
 
             AttendanceDetailFragment attendanceDetailFragment = new AttendanceDetailFragment(attendanceId);
-            AttendanceMembersFragment attendanceMembersFragment = new AttendanceMembersFragment();
+            AttendanceMembersFragment attendanceMembersFragment = new AttendanceMembersFragment(attendanceId);
 
             attendanceDetailFragment.setArguments(fragmentArgs);
             attendanceMembersFragment.setArguments(fragmentArgs);

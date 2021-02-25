@@ -59,7 +59,6 @@ public class AttendanceDetailFragment extends Fragment {
 
 
         Button toggleJoinAttendanceBtn = rootView.findViewById(R.id.join_attendance_btn);
-        System.out.println(toggleJoinAttendanceBtn);
         if(toggleJoinAttendanceBtn != null) {
             toggleJoinAttendanceBtn.setOnClickListener(v -> {
                 AlertDialog.Builder alertBuilder = new AlertDialog.Builder(v.getContext());

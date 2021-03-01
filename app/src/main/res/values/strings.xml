@@ -35,4 +35,6 @@
     <string name="attendance_tab_1">About</string>
     <string name="attendance_tab_2">Members</string>
     <string name="join_attendance">Make a role call</string>
+    <string name="attendance_title_label">Title</string>
+    <string name="title_input_prompt">Enter meeting title</string>
 </resources>

@@ -1,26 +1,38 @@
 package com.ct274.attendanceapp.components;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import com.ct274.attendanceapp.R;
 import com.ct274.attendanceapp.helpers.StringHandle;
 import com.ct274.attendanceapp.models.Attendance;
+import com.ct274.attendanceapp.requests.ThirdPartyRequests;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class AttendanceAdapter extends ArrayAdapter<Attendance>  {
     Context myContext;
     ArrayList<Attendance> data;
+    private boolean isRegistered;
     public AttendanceAdapter(@NonNull Context context, ArrayList<Attendance> data) {
         super(context, R.layout.attendance_row, data);
         this.myContext = context;
@@ -28,9 +40,12 @@ public class AttendanceAdapter extends ArrayAdapter<Attendance>  {
     }
 
     private static class ViewHolder {
-        TextView title, day, start_time, end_time, description, full_name;
+        TextView title, day, start_time, end_time, description, username;
+        CircleImageView avatar;
     }
 
+
+    @SuppressLint("ResourceAsColor")
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -44,8 +59,8 @@ public class AttendanceAdapter extends ArrayAdapter<Attendance>  {
             viewHolder.start_time = convertView.findViewById(R.id.start_time);
             viewHolder.end_time = convertView.findViewById(R.id.end_time);
             viewHolder.description = convertView.findViewById(R.id.description);
-            viewHolder.full_name = convertView.findViewById(R.id.full_name);
-
+            viewHolder.username = convertView.findViewById(R.id.username);
+            viewHolder.avatar = convertView.findViewById(R.id.creator_avatar);
             convertView.setTag(viewHolder);
         }
         else {
@@ -54,15 +69,22 @@ public class AttendanceAdapter extends ArrayAdapter<Attendance>  {
 
 
 
-
         viewHolder.title.setText(attendanceItem.getTitle());
         viewHolder.day.setText(StringHandle.formatDate(attendanceItem.getDay()));
         viewHolder.start_time.setText(attendanceItem.getStart_time());
         viewHolder.end_time.setText(attendanceItem.getEnd_time());
         viewHolder.description.setText(attendanceItem.getDescription());
-        viewHolder.full_name.setText(attendanceItem.getCreator().getFull_name());
+        viewHolder.username.setText(attendanceItem.getCreator().getAccount().getUsername());
+        String avatarPath = "https://ui-avatars.com/api/?name=" + attendanceItem.getCreator().getFull_name() +  "&background=0D8ABC&color=fff&rounded=true";
+        Picasso.get().load(avatarPath)
+                .error(R.drawable.user_circle_icon)
+                .placeholder(R.drawable.user_circle_icon)
+                .into(viewHolder.avatar);
+
+
         return convertView;
     }
+
 
 
 }

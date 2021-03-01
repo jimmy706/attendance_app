@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:focusable="false"
+    android:descendantFocusability="blocksDescendants">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -10,13 +13,16 @@
         android:paddingHorizontal="15dp"
         android:paddingVertical="10dp">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/member_avatar"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_alignParentLeft="true"
             android:src="@drawable/face_icon"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"
+            app:civ_border_color="@color/dark_blue2"
+            app:civ_border_width="2dp"
+            />
 
         <LinearLayout
             android:layout_width="wrap_content"

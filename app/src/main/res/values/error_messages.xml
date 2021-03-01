@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="first_name_required">First name required</string>
+    <string name="last_name_required">Last name required</string>
+    <string name="username_required">Username required</string>
+    <string name="password_required">Password required</string>
+    <string name="title_required">Title required</string>
+    <string name="day_required">Day required</string>
+    <string name="start_time_required">Start time required</string>
+    <string name="end_time_required">End time required</string>
+    <string name="end_time_validate">End time must greater than start time</string>
+    <string name="no_network">No internet connection</string>
+    <string name="check_network">Check your internet connection</string>
+</resources>

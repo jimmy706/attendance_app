@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
             alertDialogBuilder.setTitle(getResources().getString(R.string.no_network));
             alertDialogBuilder.setMessage(getResources().getString(R.string.check_network));
+
             AlertDialog alertDialog = alertDialogBuilder.create();
             alertDialog.show();
         }

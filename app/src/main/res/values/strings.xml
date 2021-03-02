@@ -37,4 +37,7 @@
     <string name="join_attendance">Make a role call</string>
     <string name="attendance_title_label">Title</string>
     <string name="title_input_prompt">Enter meeting title</string>
+
+    <string name="my_profile_tab_1">My meetings</string>
+    <string name="my_profile_tab_2">Registered meetings</string>
 </resources>

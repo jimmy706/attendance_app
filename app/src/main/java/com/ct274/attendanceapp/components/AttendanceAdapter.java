@@ -2,26 +2,19 @@ package com.ct274.attendanceapp.components;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 
 import com.ct274.attendanceapp.R;
 import com.ct274.attendanceapp.helpers.StringHandle;
 import com.ct274.attendanceapp.models.Attendance;
-import com.ct274.attendanceapp.requests.ThirdPartyRequests;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -32,11 +25,21 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class AttendanceAdapter extends ArrayAdapter<Attendance>  {
     Context myContext;
     ArrayList<Attendance> data;
-    private boolean isRegistered;
+    private boolean isRegistered = false;
+    private boolean isHost = false;
+
     public AttendanceAdapter(@NonNull Context context, ArrayList<Attendance> data) {
         super(context, R.layout.attendance_row, data);
         this.myContext = context;
         this.data = data;
+    }
+
+    public AttendanceAdapter(@NonNull Context context,  ArrayList<Attendance> data, boolean isHost, boolean isRegistered) {
+        super(context, R.layout.attendance_row, data);
+        this.myContext = context;
+        this.data = data;
+        this.isHost = isHost;
+        this.isRegistered = isRegistered;
     }
 
     private static class ViewHolder {
@@ -62,6 +65,13 @@ public class AttendanceAdapter extends ArrayAdapter<Attendance>  {
             viewHolder.username = convertView.findViewById(R.id.username);
             viewHolder.avatar = convertView.findViewById(R.id.creator_avatar);
             convertView.setTag(viewHolder);
+            ToggleButton registerButton = convertView.findViewById(R.id.register_button);
+            if(isHost) {
+                registerButton.setVisibility(View.GONE);
+            }
+            else {
+                registerButton.setChecked(isRegistered);
+            }
         }
         else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -80,6 +90,8 @@ public class AttendanceAdapter extends ArrayAdapter<Attendance>  {
                 .error(R.drawable.user_circle_icon)
                 .placeholder(R.drawable.user_circle_icon)
                 .into(viewHolder.avatar);
+
+
 
 
         return convertView;

@@ -5,13 +5,16 @@ import android.app.Activity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -26,6 +29,22 @@ import android.widget.Toast;
 import com.ct274.attendanceapp.Home;
 import com.ct274.attendanceapp.R;
 import com.ct274.attendanceapp.RegisterActivity;
+import com.ct274.attendanceapp.config.Endpoints;
+import com.ct274.attendanceapp.requests.AuthRequests;
+
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -64,25 +83,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
-            @Override
-            public void onChanged(@Nullable LoginResult loginResult) {
-                if (loginResult == null) {
-                    return;
-                }
-                loadingProgressBar.setVisibility(View.GONE);
-                if (loginResult.getError() != null) {
-                    showLoginFailed(loginResult.getError());
-                }
-                if (loginResult.getSuccess() != null) {
-                    updateUiWithUser(loginResult.getSuccess());
-                }
-                setResult(Activity.RESULT_OK);
-
-                //Complete and destroy login activity once successful
-                finish();
-            }
-        });
 
         TextWatcher afterTextChangedListener = new TextWatcher() {
             @Override
@@ -118,21 +118,69 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String username = usernameEditText.getText().toString();
+                String password = passwordEditText.getText().toString();
                 loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
-                startActivity(new Intent(LoginActivity.this, Home.class));
+                loginViewModel.login(username,
+                        password);
+
+                OkHttpClient client = new OkHttpClient();
+                RequestBody body = new FormBody.Builder()
+                        .add("username", username)
+                        .add("password", password)
+                        .build();
+
+                Request request = new Request.Builder()
+                        .url(Endpoints.API_URL + "api/token/")
+                        .post(body)
+                        .build();
+
+                Call call = client.newCall(request);
+
+                new Thread(){
+                  public void run() {
+                      try {
+                          Response response = call.execute();
+                          if(response.code() < 300) {
+                              String jsonData = response.body().string();
+                              try {
+                                  JSONObject jsonObject = new JSONObject(jsonData);
+
+
+                                  if(jsonObject.has("access") && jsonObject.has("refresh")) {
+                                      String access = jsonObject.getString("access");
+                                      String refresh = jsonObject.getString("refresh");
+                                      // TODO: Saved tokens to SharedPreferences
+                                      SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+                                      SharedPreferences.Editor editor = sharedPref.edit();
+                                      editor.putString(getString(R.string.access_token), access);
+                                      editor.putString(getString(R.string.refresh_token), refresh);
+                                      editor.apply();
+                                      startActivity(new Intent(LoginActivity.this, Home.class));
+                                      LoginActivity.this.runOnUiThread(() -> Toast.makeText(LoginActivity.this, "Login success", Toast.LENGTH_SHORT).show());
+                                  }
+
+                              } catch (JSONException e) {
+                                  e.printStackTrace();
+
+                              }
+                          }
+                          else {
+                              LoginActivity.this.runOnUiThread(() -> Toast.makeText(LoginActivity.this, "Wrong username or password", Toast.LENGTH_SHORT).show());
+                          }
+                      } catch (Exception e) {
+                          e.printStackTrace();
+                      }
+                        finally {
+                          loadingProgressBar.setVisibility(View.INVISIBLE);
+                      }
+                  }
+                }.start();
+
+
             }
         });
     }
 
-    private void updateUiWithUser(LoggedInUserView model) {
-        String welcome = getString(R.string.welcome) + model.getDisplayName();
-        // TODO : initiate successful logged in experience
-        Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
-    }
 
-    private void showLoginFailed(@StringRes Integer errorString) {
-        Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
-    }
 }

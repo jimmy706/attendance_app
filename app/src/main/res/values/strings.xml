@@ -40,4 +40,5 @@
 
     <string name="my_profile_tab_1">My meetings</string>
     <string name="my_profile_tab_2">Registered meetings</string>
+    <string name="shared_tokens">shared_token</string>
 </resources>

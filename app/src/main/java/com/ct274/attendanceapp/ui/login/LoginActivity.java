@@ -37,6 +37,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -124,34 +125,22 @@ public class LoginActivity extends AppCompatActivity {
                 loginViewModel.login(username,
                         password);
 
-                OkHttpClient client = new OkHttpClient();
-                RequestBody body = new FormBody.Builder()
-                        .add("username", username)
-                        .add("password", password)
-                        .build();
-
-                Request request = new Request.Builder()
-                        .url(Endpoints.API_URL + "api/token/")
-                        .post(body)
-                        .build();
-
-                Call call = client.newCall(request);
+                AuthRequests authRequests = new AuthRequests(getApplicationContext());
 
                 new Thread(){
                   public void run() {
                       try {
-                          Response response = call.execute();
+                          Response response = authRequests.loginRequest(username, password);
                           if(response.code() < 300) {
-                              String jsonData = response.body().string();
+                              String jsonData = Objects.requireNonNull(response.body()).string();
+                              System.out.println(jsonData);
                               try {
                                   JSONObject jsonObject = new JSONObject(jsonData);
-
-
                                   if(jsonObject.has("access") && jsonObject.has("refresh")) {
                                       String access = jsonObject.getString("access");
                                       String refresh = jsonObject.getString("refresh");
                                       // TODO: Saved tokens to SharedPreferences
-                                      SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+                                      SharedPreferences sharedPref = getSharedPreferences(getString(R.string.shared_tokens), Context.MODE_PRIVATE);
                                       SharedPreferences.Editor editor = sharedPref.edit();
                                       editor.putString(getString(R.string.access_token), access);
                                       editor.putString(getString(R.string.refresh_token), refresh);
@@ -162,7 +151,6 @@ public class LoginActivity extends AppCompatActivity {
 
                               } catch (JSONException e) {
                                   e.printStackTrace();
-
                               }
                           }
                           else {

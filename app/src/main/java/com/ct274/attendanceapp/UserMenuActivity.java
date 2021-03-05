@@ -5,8 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -23,6 +25,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.ct274.attendanceapp.helpers.RequestPermission;
+import com.ct274.attendanceapp.states.UserState;
 import com.ct274.attendanceapp.ui.login.LoginActivity;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -73,6 +76,7 @@ public class UserMenuActivity extends AppCompatActivity {
                 case 5:
                     break;
                 case 6:
+                    logout();
                     Toast.makeText(this, "Logout successfully", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(UserMenuActivity.this, LoginActivity.class));
                     break;
@@ -83,6 +87,14 @@ public class UserMenuActivity extends AppCompatActivity {
         });
     }
 
+    private void logout() {
+        // Remove user's tokens
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = sharedPref.edit();
+        editor.remove(getString(R.string.access_token));
+        editor.remove(getString(R.string.refresh_token));
+    }
+
     private void openGetBarcodeDialog(Context context) {
         LayoutInflater layoutInflater = getLayoutInflater();
         View getBarcodeDialog = layoutInflater.inflate(R.layout.dialog_barcode, null);
@@ -90,7 +102,7 @@ public class UserMenuActivity extends AppCompatActivity {
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
         alertBuilder.setView(getBarcodeDialog);
         AlertDialog alertDialog = alertBuilder.create();
-        String username = "b1709272";
+        String username = UserState.getInstance().getUsername();
         ImageView barcodeImage = getBarcodeDialog.findViewById(R.id.barcode_view);
         Button okButton = getBarcodeDialog.findViewById(R.id.ok_button);
         okButton.setOnClickListener(v -> {

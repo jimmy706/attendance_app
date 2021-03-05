@@ -3,10 +3,11 @@ package com.ct274.attendanceapp;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
@@ -14,10 +15,15 @@ import com.ct274.attendanceapp.components.AttendanceAdapter;
 import com.ct274.attendanceapp.models.Attendance;
 import com.ct274.attendanceapp.models.User;
 import com.ct274.attendanceapp.models.UserProfile;
+import com.ct274.attendanceapp.requests.AuthRequests;
+import com.ct274.attendanceapp.states.UserState;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.stream.Collectors;
+
+import okhttp3.Response;
 
 public class Home extends AppCompatActivity {
 
@@ -64,5 +70,44 @@ public class Home extends AppCompatActivity {
         addAttendance.setOnClickListener(v -> {
             startActivity(new Intent(Home.this, CreateMeetingActivity.class));
         });
+
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.shared_tokens) ,Context.MODE_PRIVATE);
+        String accessToken = sharedPreferences.getString(getString(R.string.access_token), "");
+        if(!accessToken.isEmpty()) {
+            getProfileAndStore(accessToken);
+        }
     }
+
+    private void getProfileAndStore(String token) {
+        AuthRequests authRequests = new AuthRequests(getApplicationContext());
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Response response = authRequests.getMyProfile(token);
+                    String jsonData = response.body().string();
+                    JSONObject jsonObject = new JSONObject(jsonData);
+                    UserState userState = UserState.getInstance();
+
+                    if(jsonObject.has("account")) {
+                        JSONObject userJSON = jsonObject.getJSONObject("account");
+                        String major = jsonObject.getString("major");
+                        String description = jsonObject.getString("description");
+
+                        userState.setFirst_name(userJSON.getString("first_name"));
+                        userState.setLast_name(userJSON.getString("last_name"));
+                        userState.setUsername(userJSON.getString("username"));
+                        userState.setEmail(userJSON.getString("email"));
+                        userState.setDescription(description);
+                        userState.setMajor(major);
+                    }
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
 }

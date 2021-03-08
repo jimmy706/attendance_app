@@ -6,6 +6,31 @@
     android:layout_height="match_parent"
     tools:context=".BarcodeScanActivity"
     android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="15dp">
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/arrow_back"
+            android:id="@+id/btn_back"
+            android:layout_centerVertical="true"
+            android:padding="0dp"
+            android:background="@color/white"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Scan for attendance"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            style="@style/activity_title"
+            android:layout_centerVertical="true"
+            />
+    </RelativeLayout>
     <SurfaceView
         android:id="@+id/surface_view"
         android:layout_width="match_parent"

@@ -48,6 +48,8 @@
 
     </RelativeLayout>
 
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -82,12 +84,29 @@
                 android:background="@drawable/radio_selector"
                 android:textColor="@drawable/radio_text"/>
         </RadioGroup>
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/shimmer_view">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <include layout="@layout/shimmer_placeholder_layout"/>
+                <include layout="@layout/shimmer_placeholder_layout"/>
+                <include layout="@layout/shimmer_placeholder_layout"/>
+                <include layout="@layout/shimmer_placeholder_layout"/>
+                <include layout="@layout/shimmer_placeholder_layout"/>
+            </LinearLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
         <ListView
             android:id="@+id/newest_attendance_listview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="0dp"
             android:paddingLeft="0dp"
-            android:paddingRight="0dp" />
+            android:paddingRight="0dp"
+            />
     </LinearLayout>
 </LinearLayout>

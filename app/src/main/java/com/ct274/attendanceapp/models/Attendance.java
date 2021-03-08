@@ -19,6 +19,8 @@ public class Attendance {
     String description;
     UserProfile creator;
     ArrayList<User> members;
+    boolean isRegistered = false;
+    boolean isHost = false;
 
     private Date getDate(String date) throws ParseException {
         String pattern = "yyyy-MM-dd";
@@ -94,6 +96,13 @@ public class Attendance {
         return day;
     }
 
+    public String getFormatDay() {
+        String pattern = "dd-MM-yyyy";
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+        return simpleDateFormat.format(this.day);
+    }
+
     public void setDay(Date day) {
         this.day = day;
     }
@@ -120,6 +129,22 @@ public class Attendance {
 
     public void setMembers(ArrayList<User> members) {
         this.members = members;
+    }
+
+    public boolean isRegistered() {
+        return isRegistered;
+    }
+
+    public void setRegistered(boolean registered) {
+        isRegistered = registered;
+    }
+
+    public boolean isHost() {
+        return isHost;
+    }
+
+    public void setHost(boolean host) {
+        isHost = host;
     }
 
     @Override

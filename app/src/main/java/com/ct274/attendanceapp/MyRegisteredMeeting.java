@@ -78,7 +78,7 @@ public class MyRegisteredMeeting extends Fragment {
                 new Attendance("6", "Vulputate ut pharetra", "13:30", "16:00", "2021-03-02", "Interdum consectetur libero id faucibus nisl. Ut tellus elementum sagittis vitae et leo duis. Pretium lectus quam id leo in vitae turpis. Non odio euismod lacinia at quis", myProfile),
                 new Attendance("7", "Vulputate ut pharetra", "13:30", "16:00", "2021-03-02", "Interdum consectetur libero id faucibus nisl. Ut tellus elementum sagittis vitae et leo duis. Pretium lectus quam id leo in vitae turpis. Non odio euismod lacinia at quis", myProfile)
         ));
-        AttendanceAdapter attendanceAdapter = new AttendanceAdapter(getContext(), attendances, false, true);
+        AttendanceAdapter attendanceAdapter = new AttendanceAdapter(getContext(), attendances);
         ListView registeredMeetingLV = rootView.findViewById(R.id.my_registered_meeting_list);
         registeredMeetingLV.setAdapter(attendanceAdapter);
         registeredMeetingLV.setOnItemClickListener((parent, view, position, id) -> {

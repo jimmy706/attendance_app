@@ -32,18 +32,32 @@
             android:layout_centerVertical="true"
             />
     </RelativeLayout>
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabs"
+
+    <ProgressBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-         />
+        android:layout_marginTop="20dp"
+        android:id="@+id/loading_indicator"/>
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/view_pager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="15dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:orientation="vertical"
+       android:id="@+id/attendance_detail_content">
+       <com.google.android.material.tabs.TabLayout
+           android:id="@+id/tabs"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+
+           />
+
+       <androidx.viewpager.widget.ViewPager
+           android:id="@+id/view_pager"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:layout_marginTop="15dp"
+           app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+   </LinearLayout>
 
 
 </LinearLayout>

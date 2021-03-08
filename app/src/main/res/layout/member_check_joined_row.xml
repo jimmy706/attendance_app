@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+ >
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/check_joined"
+        android:background="@color/transparent"
+        android:layout_centerVertical="true"
+        />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/member_avatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/face_icon"
+            app:civ_border_color="@color/dark_blue2"
+            app:civ_border_width="2dp"
+            android:layout_toRightOf="@id/check_joined"
+            android:layout_centerVertical="true"
+         />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_toRightOf="@id/member_avatar"
+            android:layout_marginLeft="10dp"
+            android:layout_centerVertical="true"
+        >
+
+            <TextView
+                android:id="@+id/member_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="B1709272"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="12sp"/>
+
+            <TextView
+                android:id="@+id/member_full_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dang Quoc Dung"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+
+
+</RelativeLayout>

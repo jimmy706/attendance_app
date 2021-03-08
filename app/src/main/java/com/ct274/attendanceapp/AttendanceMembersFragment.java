@@ -14,15 +14,18 @@ import com.ct274.attendanceapp.models.User;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class AttendanceMembersFragment extends Fragment {
 
+    private ArrayList<User> members;
     private String attendanceId;
 
 
-    public AttendanceMembersFragment(String attendanceId) {
+    public AttendanceMembersFragment(ArrayList<User> members, String attendanceId) {
         // Required empty public constructor
+        this.members = members;
         this.attendanceId = attendanceId;
     }
 
@@ -38,18 +41,9 @@ public class AttendanceMembersFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_attendance_members, container, false);
 
-        ArrayList<User> members = new ArrayList<>();
-        members.addAll(Arrays.asList(
-                new User("1", "B1709272", "b1709272@student.ctu.edu.vn", "Dung", "Dang"),
-                new User("2","B19072", "camchi@gmail.com", "Cam", "Chi"),
-                new User("3", "B1709273", "b1709273@student.ctu.edu.vn", "Cam", "Thi"),
-                new User("4", "B1709274", "b1709274@student.ctu.edu.vn", "Tien", "Nguyen"),
-                new User("5", "B1709275", "b1709275@student.ctu.edu.vn", "Lorem", "Ipsum")
-                ));
-
-            MemberAdapter memberAdapter = new MemberAdapter(Objects.requireNonNull(getContext()), members, attendanceId);
-            ListView memberListView = rootView.findViewById(R.id.attendance_members);
-            memberListView.setAdapter(memberAdapter);
+        MemberAdapter memberAdapter = new MemberAdapter(Objects.requireNonNull(getContext()), members, attendanceId);
+        ListView memberListView = rootView.findViewById(R.id.attendance_members);
+        memberListView.setAdapter(memberAdapter);
 
 
         return rootView;

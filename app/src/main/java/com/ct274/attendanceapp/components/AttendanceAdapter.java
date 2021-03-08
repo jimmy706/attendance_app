@@ -25,8 +25,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class AttendanceAdapter extends ArrayAdapter<Attendance>  {
     Context myContext;
     ArrayList<Attendance> data;
-    private boolean isRegistered = false;
-    private boolean isHost = false;
+
 
     public AttendanceAdapter(@NonNull Context context, ArrayList<Attendance> data) {
         super(context, R.layout.attendance_row, data);
@@ -34,13 +33,7 @@ public class AttendanceAdapter extends ArrayAdapter<Attendance>  {
         this.data = data;
     }
 
-    public AttendanceAdapter(@NonNull Context context,  ArrayList<Attendance> data, boolean isHost, boolean isRegistered) {
-        super(context, R.layout.attendance_row, data);
-        this.myContext = context;
-        this.data = data;
-        this.isHost = isHost;
-        this.isRegistered = isRegistered;
-    }
+
 
     private static class ViewHolder {
         TextView title, day, start_time, end_time, description, username;
@@ -66,12 +59,7 @@ public class AttendanceAdapter extends ArrayAdapter<Attendance>  {
             viewHolder.avatar = convertView.findViewById(R.id.creator_avatar);
             convertView.setTag(viewHolder);
             ToggleButton registerButton = convertView.findViewById(R.id.register_button);
-            if(isHost) {
-                registerButton.setVisibility(View.GONE);
-            }
-            else {
-                registerButton.setChecked(isRegistered);
-            }
+
         }
         else {
             viewHolder = (ViewHolder) convertView.getTag();

@@ -15,20 +15,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
+import com.ct274.attendanceapp.models.Attendance;
 import com.google.android.gms.vision.barcode.Barcode;
 
 import org.jetbrains.annotations.NotNull;
+import org.w3c.dom.Text;
 
 public class AttendanceDetailFragment extends Fragment {
     private String [] makeARoleTypes = new String[] {"Select joined members", "Scan barcode"};
     private static final int REQUEST_CAMERA_PERMISSION = 201;
-    private String attendanceId;
+    private Attendance attendance;
 
-    public AttendanceDetailFragment(String attendanceId) {
+    public AttendanceDetailFragment(Attendance attendance) {
         // Required empty public constructor
-        this.attendanceId = attendanceId;
+        this.attendance = attendance;
     }
 
 
@@ -59,6 +63,21 @@ public class AttendanceDetailFragment extends Fragment {
 
 
         Button toggleJoinAttendanceBtn = rootView.findViewById(R.id.join_attendance_btn);
+
+        TextView title = rootView.findViewById(R.id.title);
+        TextView datetime = rootView.findViewById(R.id.datetime);
+        TextView description = rootView.findViewById(R.id.description);
+        TextView username = rootView.findViewById(R.id.username);
+        TextView full_name = rootView.findViewById(R.id.full_name);
+        ToggleButton registerButton = rootView.findViewById(R.id.register_button);
+
+        title.setText(attendance.getTitle());
+        datetime.setText(attendance.getFormatDay() + ", " + attendance.getStart_time() + " - " + attendance.getEnd_time());
+        description.setText(attendance.getDescription());
+        username.setText(attendance.getCreator().getAccount().getUsername());
+        full_name.setText(attendance.getCreator().getFull_name());
+        registerButton.setChecked(attendance.isRegistered());
+
         if(toggleJoinAttendanceBtn != null) {
             toggleJoinAttendanceBtn.setOnClickListener(v -> {
                 AlertDialog.Builder alertBuilder = new AlertDialog.Builder(v.getContext());

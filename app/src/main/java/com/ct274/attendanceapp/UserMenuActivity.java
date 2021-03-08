@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ct274.attendanceapp.helpers.RequestPermission;
@@ -63,6 +64,9 @@ public class UserMenuActivity extends AppCompatActivity {
             finish();
         });
 
+        TextView username = findViewById(R.id.username);
+        username.setText(UserState.getInstance().getUsername());
+
         optionsMenu.setOnItemClickListener((parent, view, position, id) -> {
             switch (position){
                 case 2:
@@ -89,10 +93,11 @@ public class UserMenuActivity extends AppCompatActivity {
 
     private void logout() {
         // Remove user's tokens
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.shared_tokens), Context.MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = sharedPref.edit();
         editor.remove(getString(R.string.access_token));
         editor.remove(getString(R.string.refresh_token));
+        editor.apply();
     }
 
     private void openGetBarcodeDialog(Context context) {

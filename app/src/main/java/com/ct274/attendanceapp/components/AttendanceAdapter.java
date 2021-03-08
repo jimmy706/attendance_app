@@ -58,8 +58,6 @@ public class AttendanceAdapter extends ArrayAdapter<Attendance>  {
             viewHolder.username = convertView.findViewById(R.id.username);
             viewHolder.avatar = convertView.findViewById(R.id.creator_avatar);
             convertView.setTag(viewHolder);
-            ToggleButton registerButton = convertView.findViewById(R.id.register_button);
-
         }
         else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -74,6 +72,10 @@ public class AttendanceAdapter extends ArrayAdapter<Attendance>  {
         viewHolder.description.setText(attendanceItem.getDescription());
         viewHolder.username.setText(attendanceItem.getCreator().getAccount().getUsername());
         String avatarPath = "https://ui-avatars.com/api/?name=" + attendanceItem.getCreator().getFull_name() +  "&background=0D8ABC&color=fff&rounded=true";
+        ToggleButton registerButton = convertView.findViewById(R.id.register_button);
+        System.out.println(attendanceItem.isRegistered());
+        registerButton.setChecked(attendanceItem.isRegistered());
+
         Picasso.get().load(avatarPath)
                 .error(R.drawable.user_circle_icon)
                 .placeholder(R.drawable.user_circle_icon)

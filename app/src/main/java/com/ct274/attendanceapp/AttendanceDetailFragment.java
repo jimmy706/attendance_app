@@ -1,6 +1,7 @@
 package com.ct274.attendanceapp;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,10 +26,12 @@ import com.google.android.gms.vision.barcode.Barcode;
 import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Text;
 
+import java.util.Objects;
+
 public class AttendanceDetailFragment extends Fragment {
-    private String [] makeARoleTypes = new String[] {"Select joined members", "Scan barcode"};
+    private final String [] makeARoleTypes = new String[] {"Select joined members", "Scan barcode"};
     private static final int REQUEST_CAMERA_PERMISSION = 201;
-    private Attendance attendance;
+    private final Attendance attendance;
 
     public AttendanceDetailFragment(Attendance attendance) {
         // Required empty public constructor
@@ -37,18 +40,20 @@ public class AttendanceDetailFragment extends Fragment {
 
 
     private void requestCameraPermission() {
-        if(ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+        if(ActivityCompat.checkSelfPermission(Objects.requireNonNull(getContext()), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             startActivity(new Intent(getContext(), BarcodeScanActivity.class));
         }
         else {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
+            ActivityCompat.requestPermissions(Objects.requireNonNull(getActivity()), new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
         }
     }
 
     private void startBarcodeScanActivity() {
         Intent intent = new Intent(getActivity(), BarcodeScanActivity.class);
         Bundle sendData = new Bundle();
-
+        sendData.putString("attendance_id", attendance.getId());
+        intent.putExtras(sendData);
+        startActivity(intent);
     }
 
     @Override
@@ -56,6 +61,7 @@ public class AttendanceDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -63,6 +69,9 @@ public class AttendanceDetailFragment extends Fragment {
 
 
         Button toggleJoinAttendanceBtn = rootView.findViewById(R.id.join_attendance_btn);
+        if(!attendance.isHost()){
+            toggleJoinAttendanceBtn.setVisibility(View.GONE);
+        }
 
         TextView title = rootView.findViewById(R.id.title);
         TextView datetime = rootView.findViewById(R.id.datetime);

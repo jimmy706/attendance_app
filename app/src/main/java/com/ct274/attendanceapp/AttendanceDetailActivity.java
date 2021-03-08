@@ -51,13 +51,7 @@ public class AttendanceDetailActivity extends AppCompatActivity {
             attendanceId = bundle.getString("attendance_id");
             Bundle fragmentArgs = new Bundle();
             fragmentArgs.putString("attendance_id", attendanceId);
-
-
-
-
         }
-
-
 
         ImageButton backBtn = findViewById(R.id.btn_back);
         backBtn.setOnClickListener(v -> {
@@ -85,7 +79,9 @@ public class AttendanceDetailActivity extends AppCompatActivity {
                         String start_time = jsonData.getString("start_time");
                         String end_time = jsonData.getString("end_time");
                         String day = jsonData.getString("day");
+                        String title = jsonData.getString("title");
                         boolean is_registered = jsonData.getBoolean("is_registered");
+                        boolean is_host = jsonData.getBoolean("is_host");
 
                         ArrayList<User> members = new ArrayList<>();
                         JSONArray membersJson = jsonData.getJSONArray("members");
@@ -109,12 +105,13 @@ public class AttendanceDetailActivity extends AppCompatActivity {
                         String email = creatorAccountJSON.getString("email");
 
                         UserProfile creator = new UserProfile(new User(username, email, firstName, lastName), firstName + " " + lastName, major, "");
-                        Attendance attendance = new Attendance(meetingId, "Lorem Ipsum", start_time, end_time, day, description, creator, members);
+                        Attendance attendance = new Attendance(meetingId, title, start_time, end_time, day, description, creator, members);
                         attendance.setRegistered(is_registered);
+                        attendance.setHost(is_host);
 
                         AttendanceDetailActivity.this.runOnUiThread(()-> {
                             AttendanceDetailFragment attendanceDetailFragment = new AttendanceDetailFragment(attendance);
-                            AttendanceMembersFragment attendanceMembersFragment = new AttendanceMembersFragment(attendance.getMembers(), meetingId);
+                            AttendanceMembersFragment attendanceMembersFragment = new AttendanceMembersFragment(attendance);
 
 
                             SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getApplicationContext(), getSupportFragmentManager(), attendanceDetailFragment, attendanceMembersFragment);

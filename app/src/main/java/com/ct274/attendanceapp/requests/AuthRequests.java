@@ -41,6 +41,20 @@ public class AuthRequests {
         return call.execute();
     }
 
+    public Response refreshToken(String rfToken) throws IOException{
+        OkHttpClient client = new OkHttpClient();
+        RequestBody body = new FormBody.Builder()
+                .add("refresh", rfToken)
+                .build();
+
+        Request request = new Request.Builder()
+                .url(Endpoints.API_URL + "api/token/refresh/")
+                .post(body)
+                .build();
+
+        return client.newCall(request).execute();
+    }
+
 
     public Response registerRequest(RegisterUser registerUser) throws IOException {
         OkHttpClient client = new OkHttpClient.Builder()

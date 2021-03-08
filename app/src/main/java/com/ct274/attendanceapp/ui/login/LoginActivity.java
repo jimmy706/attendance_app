@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ct274.attendanceapp.Home;
+import com.ct274.attendanceapp.MainActivity;
 import com.ct274.attendanceapp.R;
 import com.ct274.attendanceapp.RegisterActivity;
 import com.ct274.attendanceapp.config.Endpoints;
@@ -168,6 +169,15 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK) {
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            return false;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 

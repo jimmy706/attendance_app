@@ -37,7 +37,6 @@ public class RegisterActivity extends AppCompatActivity {
     EditText usernameInput;
     EditText emailInput;
     EditText passwordInput;
-    EditText descriptionInput;
     Spinner majorInput;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

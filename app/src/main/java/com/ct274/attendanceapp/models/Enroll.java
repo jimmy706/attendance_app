@@ -34,4 +34,13 @@ public class Enroll {
     public void setJoined(boolean joined) {
         this.joined = joined;
     }
+
+    @Override
+    public String toString() {
+        return "Enroll{" +
+                "enroller=" + enroller +
+                ", attendance='" + attendance + '\'' +
+                ", joined=" + joined +
+                '}';
+    }
 }

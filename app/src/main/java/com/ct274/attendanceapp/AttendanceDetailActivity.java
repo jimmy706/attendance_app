@@ -8,6 +8,7 @@ import com.ct274.attendanceapp.models.Attendance;
 import com.ct274.attendanceapp.models.User;
 import com.ct274.attendanceapp.models.UserProfile;
 import com.ct274.attendanceapp.requests.AttendanceRequests;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
@@ -37,10 +38,12 @@ public class AttendanceDetailActivity extends AppCompatActivity {
     ProgressBar progressBar;
     LinearLayout contentContainer;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attendance_detail);
+
 
         progressBar = findViewById(R.id.loading_indicator);
         contentContainer = findViewById(R.id.attendance_detail_content);
@@ -49,8 +52,6 @@ public class AttendanceDetailActivity extends AppCompatActivity {
         String attendanceId = "-1";
         if(bundle != null) {
             attendanceId = bundle.getString("attendance_id");
-            Bundle fragmentArgs = new Bundle();
-            fragmentArgs.putString("attendance_id", attendanceId);
         }
 
         ImageButton backBtn = findViewById(R.id.btn_back);

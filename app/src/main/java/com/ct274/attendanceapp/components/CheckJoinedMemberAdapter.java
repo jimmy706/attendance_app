@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.ct274.attendanceapp.R;
+import com.ct274.attendanceapp.listeners.WatchCheckedListener;
 import com.ct274.attendanceapp.models.Enroll;
 import com.ct274.attendanceapp.models.User;
 
@@ -23,17 +24,17 @@ public class CheckJoinedMemberAdapter extends ArrayAdapter<Enroll> {
 
      ArrayList<Enroll> enrolls;
      Context myContext;
-
-    public CheckJoinedMemberAdapter(@NonNull Context context, int resource, ArrayList<Enroll> enrolls) {
+    WatchCheckedListener watchCheckedListener;
+    public CheckJoinedMemberAdapter(@NonNull Context context, ArrayList<Enroll> enrolls, WatchCheckedListener watchCheckedListener) {
         super(context, R.layout.member_check_joined_row, enrolls);
         this.myContext = context;
         this.enrolls = enrolls;
+        this.watchCheckedListener = watchCheckedListener;
     }
 
     private class ViewHolder {
         TextView username, full_name;
         CircleImageView avatar;
-        CheckBox checkJoined;
     }
 
     @NonNull
@@ -47,15 +48,25 @@ public class CheckJoinedMemberAdapter extends ArrayAdapter<Enroll> {
             viewHolder.username = convertView.findViewById(R.id.member_username);
             viewHolder.full_name = convertView.findViewById(R.id.member_full_name);
             viewHolder.avatar = convertView.findViewById(R.id.member_avatar);
-            viewHolder.checkJoined = convertView.findViewById(R.id.check_joined);
-
+            convertView.setTag(viewHolder);
         }
         else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.checkJoined.setChecked(enroll.isJoined());
+
+        if(enroll != null) {
+            CheckBox checkJoined = convertView.findViewById(R.id.check_joined);
+            checkJoined.setChecked(enroll.isJoined());
+            checkJoined.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                watchCheckedListener.onCheckChange(isChecked);
+            });
+            viewHolder.full_name.setText(enroll.getEnroller().getFirst_name() + " " + enroll.getEnroller().getLast_name());
+            viewHolder.username.setText(enroll.getEnroller().getUsername());
+        }
 
         return convertView;
     }
+
+
 }

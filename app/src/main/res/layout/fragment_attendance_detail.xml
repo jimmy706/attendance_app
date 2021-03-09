@@ -1,114 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".AttendanceDetailFragment"
     android:orientation="vertical">
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingHorizontal="15dp">
-
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Lorem ipsum dolor sit amet"
-            android:id="@+id/title"
-            style="@style/attendance_title"/>
+        android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/calendar_today"
-                android:layout_marginRight="5dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="20-02-2021, 14:00 - 16:00"
-                android:id="@+id/datetime"
-                />
-        </LinearLayout>
+            android:orientation="vertical"
+            android:paddingHorizontal="15dp">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Lorem ipsum dolor sit amet"
+                android:id="@+id/title"
+                style="@style/attendance_title"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:id="@+id/creator"
-                android:layout_centerVertical="true">
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/face_icon"
-                    android:id="@+id/avatar"
-                    android:layout_gravity="center"
-                    app:civ_border_color="@color/dark_blue2"
-                    app:civ_border_width="2dp"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/calendar_today"
+                    android:layout_marginRight="5dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="20-02-2021, 14:00 - 16:00"
+                    android:id="@+id/datetime"
                     />
-               <LinearLayout
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:orientation="vertical"
-                   android:layout_marginLeft="10dp">
-                   <TextView
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       android:text="B1709272"
-                       android:id="@+id/username"
-                        style="@style/username"
-                       />
-                   <TextView
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       android:text="Dung Dang"
-                       android:id="@+id/full_name"
-                       style="@style/full_name"
-                       />
-               </LinearLayout>
             </LinearLayout>
 
-            <ToggleButton
-                android:layout_width="80dp"
-                android:layout_height="30dp"
-                android:padding="0dp"
-                android:id="@+id/register_button"
-                android:text="Register"
-                android:textSize="11sp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:textAllCaps="false"
-                android:textOn="Leave"
-                android:textOff="Join"
-                android:background="@drawable/toggle_register_meeting"
-                android:layout_alignParentEnd="true"
-                android:textColor="@color/white"/>
-        </RelativeLayout>
-        <TextView
-            android:layout_marginTop="18dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-"           android:id="@+id/description"
-        />
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/join_attendance"
-            android:id="@+id/join_attendance_btn"
-            android:layout_marginTop="15dp"
-            />
-    </LinearLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/creator"
+                    android:layout_centerVertical="true">
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/face_icon"
+                        android:id="@+id/avatar"
+                        android:layout_gravity="center"
+                        app:civ_border_color="@color/dark_blue2"
+                        app:civ_border_width="2dp"
+                        />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginLeft="10dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="B1709272"
+                            android:id="@+id/username"
+                            style="@style/username"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Dung Dang"
+                            android:id="@+id/full_name"
+                            style="@style/full_name"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
 
-</ScrollView>
+                <ToggleButton
+                    android:layout_width="80dp"
+                    android:layout_height="30dp"
+                    android:padding="0dp"
+                    android:id="@+id/register_button"
+                    android:text="Register"
+                    android:textSize="11sp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:textAllCaps="false"
+                    android:textOn="Leave"
+                    android:textOff="Join"
+                    android:background="@drawable/toggle_register_meeting"
+                    android:layout_alignParentEnd="true"
+                    android:textColor="@color/white"/>
+            </RelativeLayout>
+            <TextView
+                android:layout_marginTop="18dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+"           android:id="@+id/description"
+                />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/join_attendance"
+                android:id="@+id/join_attendance_btn"
+                android:layout_marginTop="15dp"
+                />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

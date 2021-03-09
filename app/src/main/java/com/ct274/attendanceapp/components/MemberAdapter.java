@@ -51,6 +51,7 @@ public class MemberAdapter extends ArrayAdapter<User> {
             viewHolder.avatar = convertView.findViewById(R.id.member_avatar);
 
             ImageButton toggleButton = convertView.findViewById(R.id.toggle_member_menu);
+
             toggleButton.setOnClickListener(v -> {
                 PopupMenu popupMenu = new PopupMenu(myContext, v);
                 MenuInflater menuInflater = popupMenu.getMenuInflater();

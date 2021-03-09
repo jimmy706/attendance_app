@@ -2,11 +2,13 @@ package com.ct274.attendanceapp.components;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
@@ -15,17 +17,20 @@ import androidx.annotation.Nullable;
 import com.ct274.attendanceapp.R;
 import com.ct274.attendanceapp.helpers.StringHandle;
 import com.ct274.attendanceapp.models.Attendance;
+import com.ct274.attendanceapp.requests.AttendanceRequests;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.Response;
 
 
 public class AttendanceAdapter extends ArrayAdapter<Attendance>  {
     Context myContext;
     ArrayList<Attendance> data;
-
+    private AttendanceRequests attendanceRequests = new AttendanceRequests();
+    private String accessToken = "";
 
     public AttendanceAdapter(@NonNull Context context, ArrayList<Attendance> data) {
         super(context, R.layout.attendance_row, data);
@@ -73,20 +78,52 @@ public class AttendanceAdapter extends ArrayAdapter<Attendance>  {
         viewHolder.username.setText(attendanceItem.getCreator().getAccount().getUsername());
         String avatarPath = "https://ui-avatars.com/api/?name=" + attendanceItem.getCreator().getFull_name() +  "&background=0D8ABC&color=fff&rounded=true";
         ToggleButton registerButton = convertView.findViewById(R.id.register_button);
-        System.out.println(attendanceItem.isRegistered());
         registerButton.setChecked(attendanceItem.isRegistered());
+
+        SharedPreferences sharedPreferences = myContext.getSharedPreferences("shared_token", Context.MODE_PRIVATE);
+        String accessToken = sharedPreferences.getString("access", "");
+
+        registerButton.setOnClickListener(v -> {
+            if(attendanceItem.isRegistered()) {
+                leaveMeeting(accessToken, attendanceItem.getId());
+            }
+            else {
+                joinMeeting(accessToken, attendanceItem.getId());
+            }
+        });
 
         Picasso.get().load(avatarPath)
                 .error(R.drawable.user_circle_icon)
                 .placeholder(R.drawable.user_circle_icon)
                 .into(viewHolder.avatar);
 
-
-
-
         return convertView;
     }
 
+    private void joinMeeting(String token, String id) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Response response = attendanceRequests.requestJoinMeeting(token, id);
+                    System.out.println(response.body().string());
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
 
+            }
+        }).start();
+    }
+
+    private void leaveMeeting(String token, String id) {
+        try {
+            Response response = attendanceRequests.requestLeaveMeeting(token, id);
+            System.out.println(response.body().string());
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }

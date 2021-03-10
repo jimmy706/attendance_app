@@ -37,11 +37,9 @@ public class AttendanceMembersFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_attendance_members, container, false);
-
-        MemberAdapter memberAdapter = new MemberAdapter(Objects.requireNonNull(getContext()), attendance.getMembers(), attendance.getId());
+        MemberAdapter memberAdapter = new MemberAdapter(Objects.requireNonNull(getContext()), attendance.getMembers(), attendance);
         ListView memberListView = rootView.findViewById(R.id.attendance_members);
         memberListView.setAdapter(memberAdapter);
-
 
         return rootView;
     }

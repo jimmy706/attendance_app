@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,9 +23,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CheckJoinedMemberAdapter extends ArrayAdapter<Enroll> {
 
-     ArrayList<Enroll> enrolls;
-     Context myContext;
+    ArrayList<Enroll> enrolls;
+    Context myContext;
     WatchCheckedListener watchCheckedListener;
+
     public CheckJoinedMemberAdapter(@NonNull Context context, ArrayList<Enroll> enrolls, WatchCheckedListener watchCheckedListener) {
         super(context, R.layout.member_check_joined_row, enrolls);
         this.myContext = context;
@@ -54,12 +56,12 @@ public class CheckJoinedMemberAdapter extends ArrayAdapter<Enroll> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-
         if(enroll != null) {
             CheckBox checkJoined = convertView.findViewById(R.id.check_joined);
             checkJoined.setChecked(enroll.isJoined());
-            checkJoined.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                watchCheckedListener.onCheckChange(isChecked);
+            checkJoined.setOnClickListener(v -> {
+                boolean checked = ((CompoundButton) v).isChecked();
+                watchCheckedListener.onCheckChange(checked, enroll);
             });
             viewHolder.full_name.setText(enroll.getEnroller().getFirst_name() + " " + enroll.getEnroller().getLast_name());
             viewHolder.username.setText(enroll.getEnroller().getUsername());
@@ -67,6 +69,7 @@ public class CheckJoinedMemberAdapter extends ArrayAdapter<Enroll> {
 
         return convertView;
     }
+
 
 
 }

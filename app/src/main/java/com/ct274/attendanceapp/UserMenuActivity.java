@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -49,10 +50,10 @@ public class UserMenuActivity extends AppCompatActivity {
         ArrayList<String> options = new ArrayList<>(Arrays.asList(
                 "My profile",
                 "My meeting",
-                "Get barcode",
-                "Create new meeting",
                 "My registered meeting",
-                "Enrolled history",
+                "Get barcode",
+                "Join meeting",
+                "Create new meeting",
                 "Logout"
         ));
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, options);
@@ -70,14 +71,16 @@ public class UserMenuActivity extends AppCompatActivity {
         optionsMenu.setOnItemClickListener((parent, view, position, id) -> {
             switch (position){
                 case 2:
-                    openGetBarcodeDialog(this);
+                    viewMyProfile(1);
                     break;
                 case 3:
-                    startActivity(new Intent(UserMenuActivity.this, CreateMeetingActivity.class));
+                    openGetBarcodeDialog(this);
                     break;
                 case 4:
+                    openJoinMeetingDialog(this);
                     break;
                 case 5:
+                    startActivity(new Intent(UserMenuActivity.this, CreateMeetingActivity.class));
                     break;
                 case 6:
                     logout();
@@ -85,7 +88,7 @@ public class UserMenuActivity extends AppCompatActivity {
                     startActivity(new Intent(UserMenuActivity.this, LoginActivity.class));
                     break;
                 default:
-                    startActivity(new Intent(UserMenuActivity.this, MyProfileActivity.class));
+                    viewMyProfile(0);
                     break;
             }
         });
@@ -142,7 +145,32 @@ public class UserMenuActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         alertDialog.show();
+    }
 
+    private void openJoinMeetingDialog(Context context) {
+        LayoutInflater layoutInflater = getLayoutInflater();
+        View joinMeetingDialog = layoutInflater.inflate(R.layout.join_meeting_dialog, null);
 
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
+        alertBuilder.setView(joinMeetingDialog);
+        AlertDialog alertDialog = alertBuilder.create();
+
+        EditText joinKeyInput = joinMeetingDialog.findViewById(R.id.join_key);
+        Button joinButton = joinMeetingDialog.findViewById(R.id.join_btn);
+        joinButton.setOnClickListener(v -> {
+            String joinKey = joinKeyInput.getText().toString();
+            Toast.makeText(context, joinKey, Toast.LENGTH_SHORT).show();
+            alertDialog.dismiss();
+        });
+
+        alertDialog.show();
+    }
+
+    private void viewMyProfile(int tab) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("tab", tab);
+        Intent intent = new Intent(UserMenuActivity.this, MyProfileActivity.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }

@@ -1,11 +1,14 @@
 package com.ct274.attendanceapp;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.ArraySet;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -14,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.ct274.attendanceapp.components.CheckJoinedMemberAdapter;
+import com.ct274.attendanceapp.components.LoadingDialog;
 import com.ct274.attendanceapp.listeners.WatchCheckedListener;
 import com.ct274.attendanceapp.models.Enroll;
 import com.ct274.attendanceapp.models.User;
@@ -34,17 +38,16 @@ public class CheckJoinedMembers extends AppCompatActivity {
     private CheckJoinedMemberAdapter checkJoinedMemberAdapter;
     private ProgressBar progressBar;
     private ListView listView;
+    private String accessToken;
+    private LoadingDialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_joined_members);
 
-        checkJoinedMemberAdapter = new CheckJoinedMemberAdapter(this, memberEnrolls, checked -> {
-            Toast.makeText(CheckJoinedMembers.this, Boolean.toString(checked), Toast.LENGTH_SHORT).show();
-        });
+        loadingDialog = new LoadingDialog(this);
         listView = findViewById(R.id.member_list);
-        listView.setAdapter(checkJoinedMemberAdapter);
 
         progressBar = findViewById(R.id.loading_progress);
 
@@ -59,7 +62,7 @@ public class CheckJoinedMembers extends AppCompatActivity {
         }
 
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.shared_tokens) , Context.MODE_PRIVATE);
-        String accessToken = sharedPreferences.getString(getString(R.string.access_token), "");
+        accessToken = sharedPreferences.getString(getString(R.string.access_token), "");
 
         ImageButton backBtn = findViewById(R.id.btn_back);
         backBtn.setOnClickListener(v -> {
@@ -68,12 +71,15 @@ public class CheckJoinedMembers extends AppCompatActivity {
 
         Button submitBtn = findViewById(R.id.submit_btn);
         submitBtn.setOnClickListener(v -> {
+                loadingDialog.startLoadingDialog();
+                handleRequestCheckEnroll();
 
         });
     }
 
     private void listMember(String meetingId) {
         new Thread(new Runnable() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void run() {
                 try {
@@ -82,7 +88,6 @@ public class CheckJoinedMembers extends AppCompatActivity {
                     String data = response.body().string();
                     if(response.isSuccessful()) {
                         JSONArray jsonArray = new JSONArray(data);
-                        System.out.println(data);
                         for(int i = 0; i < jsonArray.length(); i++) {
                             JSONObject enrollJSON = jsonArray.getJSONObject(i);
                             boolean isJoined = enrollJSON.getBoolean("joined");
@@ -99,7 +104,20 @@ public class CheckJoinedMembers extends AppCompatActivity {
                             memberEnrolls.add(enroll);
 
                             CheckJoinedMembers.this.runOnUiThread(()-> {
-                                checkJoinedMemberAdapter.notifyDataSetChanged();
+                                checkJoinedMemberAdapter = new CheckJoinedMemberAdapter(CheckJoinedMembers.this, memberEnrolls, (checked, selectEnroll) -> {
+                                    int position = memberEnrolls.indexOf(selectEnroll);
+                                    if(position != -1) {
+                                        for(int j = 0; j < memberEnrolls.size(); j++) {
+                                            if(j == position) {
+                                                Enroll enroll1 = memberEnrolls.get(j);
+                                                enroll1.setJoined(checked);
+                                                memberEnrolls.set(j, enroll1);
+                                                break;
+                                            }
+                                        }
+                                    }
+                                });
+                                listView.setAdapter(checkJoinedMemberAdapter);
                             });
                         }
                     }
@@ -117,5 +135,37 @@ public class CheckJoinedMembers extends AppCompatActivity {
         }).start();
     }
 
+    private void handleRequestCheckEnroll(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    JSONArray requestData = new JSONArray();
+                    for(int i = 0; i < memberEnrolls.size(); i++) {
+                        Enroll enroll = memberEnrolls.get(i);
+                        JSONObject dataJSON = new JSONObject();
+                        dataJSON.put("joined", enroll.isJoined());
+                        dataJSON.put("user_id", enroll.getEnroller().getId());
+                        requestData.put(dataJSON);
+                    }
+                    Response response = attendanceRequests.checkEnrollMultipleMembers(accessToken, requestData.toString());
 
+                    if(response.isSuccessful()) {
+                        CheckJoinedMembers.this.runOnUiThread(()-> {
+                            Toast.makeText(CheckJoinedMembers.this, "Update checklist success", Toast.LENGTH_SHORT).show();
+                            finish();
+                        });
+                    }
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+                finally {
+                    CheckJoinedMembers.this.runOnUiThread(()->{
+                        loadingDialog.closeDialog();
+                    });
+                }
+            }
+        }).start();
+    }
 }

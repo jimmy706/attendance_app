@@ -18,6 +18,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -31,6 +33,7 @@ import com.ct274.attendanceapp.models.User;
 import com.ct274.attendanceapp.requests.AttendanceRequests;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Text;
@@ -39,6 +42,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Response;
 
 public class AttendanceDetailFragment extends Fragment {
@@ -93,6 +97,12 @@ public class AttendanceDetailFragment extends Fragment {
         TextView username = rootView.findViewById(R.id.username);
         TextView full_name = rootView.findViewById(R.id.full_name);
         ToggleButton registerButton = rootView.findViewById(R.id.register_button);
+        String imagePath = "https://ui-avatars.com/api/?name=" + attendance.getCreator().getFull_name() +  "&background=0D8ABC&color=fff&rounded=true";
+        CircleImageView avatar = rootView.findViewById(R.id.avatar);
+        Picasso.get().load(imagePath)
+                .placeholder(R.drawable.user_circle_icon)
+                .error(R.drawable.user_circle_icon)
+                .into(avatar);
 
         title.setText(attendance.getTitle());
         datetime.setText(attendance.getFormatDay() + ", " + attendance.getStart_time() + " - " + attendance.getEnd_time());
@@ -135,6 +145,23 @@ public class AttendanceDetailFragment extends Fragment {
                 });
                 alertBuilder.show();
             });
+        }
+
+        ImageButton shareBtn = rootView.findViewById(R.id.share_btn);
+        if(attendance.getShareKey() != null) {
+            shareBtn.setOnClickListener(v->{
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, attendance.getShareKey());
+                sendIntent.setType("text/plain");
+
+                Intent shareIntent = Intent.createChooser(sendIntent, "Share meeting key");
+                startActivity(shareIntent);
+
+            });
+        }
+        else {
+            shareBtn.setVisibility(View.GONE);
         }
 
         return rootView;

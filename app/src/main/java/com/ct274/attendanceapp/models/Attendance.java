@@ -21,6 +21,7 @@ public class Attendance {
     ArrayList<User> members;
     boolean isRegistered = false;
     boolean isHost = false;
+    String shareKey;
 
     private Date getDate(String date) throws ParseException {
         String pattern = "yyyy-MM-dd";
@@ -145,6 +146,14 @@ public class Attendance {
 
     public void setHost(boolean host) {
         isHost = host;
+    }
+
+    public String getShareKey() {
+        return shareKey;
+    }
+
+    public void setShareKey(String shareKey) {
+        this.shareKey = shareKey;
     }
 
     @Override

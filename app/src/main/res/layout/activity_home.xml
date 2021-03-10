@@ -8,45 +8,45 @@
     android:orientation="vertical"
     android:padding="15dp">
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="15dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:text="Home"
-            style="@style/activity_title"
-            />
+        <include
+            layout="@layout/search_attendance"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true">
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginLeft="15dp">
+
             <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/add_circle"
-                android:background="@color/transparent"
                 android:id="@+id/add_new_attendance"
-                android:contentDescription="Add new meeting"
-                />
-            <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/user_icon"
                 android:background="@color/transparent"
-                android:layout_marginLeft="10dp"
+                android:contentDescription="Add new meeting"
+                android:src="@drawable/add_circle" />
+
+            <ImageButton
                 android:id="@+id/view_user_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="@color/transparent"
                 android:contentDescription="Open menu"
-                />
+                android:src="@drawable/user_icon" />
         </LinearLayout>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 
 
@@ -91,7 +91,8 @@
             android:id="@+id/shimmer_view">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
                 <include layout="@layout/shimmer_placeholder_layout"/>
                 <include layout="@layout/shimmer_placeholder_layout"/>
                 <include layout="@layout/shimmer_placeholder_layout"/>

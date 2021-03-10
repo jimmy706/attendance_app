@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/join_attendance"
-        android:title="Join meeting"/>
+
     <item
         android:id="@+id/remove_attendance"
         android:title="Remove from meeting"

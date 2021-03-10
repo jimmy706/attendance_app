@@ -69,7 +69,6 @@ public class AttendanceAdapter extends ArrayAdapter<Attendance>  {
         }
 
 
-
         viewHolder.title.setText(attendanceItem.getTitle());
         viewHolder.day.setText(StringHandle.formatDate(attendanceItem.getDay()));
         viewHolder.start_time.setText(attendanceItem.getStart_time());
@@ -78,6 +77,7 @@ public class AttendanceAdapter extends ArrayAdapter<Attendance>  {
         viewHolder.username.setText(attendanceItem.getCreator().getAccount().getUsername());
         String avatarPath = "https://ui-avatars.com/api/?name=" + attendanceItem.getCreator().getFull_name() +  "&background=0D8ABC&color=fff&rounded=true";
         ToggleButton registerButton = convertView.findViewById(R.id.register_button);
+
         registerButton.setChecked(attendanceItem.isRegistered());
 
         SharedPreferences sharedPreferences = myContext.getSharedPreferences("shared_token", Context.MODE_PRIVATE);

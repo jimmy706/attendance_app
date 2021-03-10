@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.ct274.attendanceapp.R;
+import com.ct274.attendanceapp.models.Attendance;
 import com.ct274.attendanceapp.models.User;
 import com.squareup.picasso.Picasso;
 
@@ -25,11 +26,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MemberAdapter extends ArrayAdapter<User> {
     private ArrayList<User> members;
     private Context myContext;
-    private String attendanceId;
-    public MemberAdapter(@NonNull Context context, ArrayList<User> members, String attendanceId) {
+    private Attendance attendance;
+    public MemberAdapter(@NonNull Context context, ArrayList<User> members, Attendance attendance) {
         super(context, R.layout.member_row, members);
         this.members = members;
-        this.attendanceId = attendanceId;
+        this.attendance = attendance;
         this.myContext = context;
     }
 
@@ -51,23 +52,26 @@ public class MemberAdapter extends ArrayAdapter<User> {
             viewHolder.avatar = convertView.findViewById(R.id.member_avatar);
 
             ImageButton toggleButton = convertView.findViewById(R.id.toggle_member_menu);
-
-            toggleButton.setOnClickListener(v -> {
-                PopupMenu popupMenu = new PopupMenu(myContext, v);
-                MenuInflater menuInflater = popupMenu.getMenuInflater();
-                menuInflater.inflate(R.menu.attendance_member_row_menu, popupMenu.getMenu());
-                popupMenu.show();
-                popupMenu.setOnMenuItemClickListener(item -> {
-                    switch (item.getItemId()){
-                        case R.id.join_attendance:
-                            return true;
-                        case R.id.remove_attendance:
-                            return true;
-                        default:
-                            return false;
-                    }
+            if(!attendance.isHost()) {
+                toggleButton.setVisibility(View.GONE);
+            }
+            else {
+                toggleButton.setOnClickListener(v -> {
+                    PopupMenu popupMenu = new PopupMenu(myContext, v);
+                    MenuInflater menuInflater = popupMenu.getMenuInflater();
+                    menuInflater.inflate(R.menu.attendance_member_row_menu, popupMenu.getMenu());
+                    popupMenu.show();
+                    popupMenu.setOnMenuItemClickListener(item -> {
+                        switch (item.getItemId()){
+                            case R.id.remove_attendance:
+                                return true;
+                            default:
+                                return false;
+                        }
+                    });
                 });
-            });
+            }
+
         }
         else {
             viewHolder = (ViewHolder) convertView.getTag();

@@ -39,6 +39,12 @@ public class MyProfileActivity extends AppCompatActivity {
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
 
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null && bundle.containsKey("tab")) {
+            int tab = bundle.getInt("tab");
+            viewPager.setCurrentItem(tab);
+        }
+
         ImageButton btnBack = findViewById(R.id.btn_back);
         btnBack.setOnClickListener(v -> {
             finish();
@@ -57,7 +63,6 @@ public class MyProfileActivity extends AppCompatActivity {
                 .error(R.drawable.user_circle_icon)
                 .placeholder(R.drawable.user_circle_icon)
                 .into(avatar);
-        System.out.println(userState);
 
     }
 }

@@ -102,11 +102,11 @@ public class AttendanceRequests {
         return client.newCall(request).execute();
     }
 
-    public Response checkEnrollMultipleMembers(String token, String data) throws IOException {
+    public Response checkEnrollMultipleMembers(String token, String data, String meetingId) throws IOException {
         OkHttpClient client = new OkHttpClient();
         RequestBody body = RequestBody.create(data, JSON_TYPE);
         Request request = new Request.Builder()
-                .url(Endpoints.API_URL + "attendances/check-join-multiples/12/")
+                .url(Endpoints.API_URL + "attendances/check-join-multiples/" + meetingId + "/")
                 .addHeader("Authorization", "Bearer " + token)
                 .put(body)
                 .build();

@@ -40,7 +40,7 @@ public class CheckJoinedMembers extends AppCompatActivity {
     private ListView listView;
     private String accessToken;
     private LoadingDialog loadingDialog;
-
+    private String attendanceId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +53,7 @@ public class CheckJoinedMembers extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         if(bundle != null) {
-            String attendanceId = bundle.getString("attendance_id");
+            attendanceId = bundle.getString("attendance_id");
             if(attendanceId != null) {
                 progressBar.setVisibility(View.VISIBLE);
                 listView.setVisibility(View.GONE);
@@ -72,7 +72,7 @@ public class CheckJoinedMembers extends AppCompatActivity {
         Button submitBtn = findViewById(R.id.submit_btn);
         submitBtn.setOnClickListener(v -> {
                 loadingDialog.startLoadingDialog();
-                handleRequestCheckEnroll();
+                handleRequestCheckEnroll(attendanceId);
 
         });
     }
@@ -135,7 +135,7 @@ public class CheckJoinedMembers extends AppCompatActivity {
         }).start();
     }
 
-    private void handleRequestCheckEnroll(){
+    private void handleRequestCheckEnroll(String meetingId){
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -148,12 +148,19 @@ public class CheckJoinedMembers extends AppCompatActivity {
                         dataJSON.put("user_id", enroll.getEnroller().getId());
                         requestData.put(dataJSON);
                     }
-                    Response response = attendanceRequests.checkEnrollMultipleMembers(accessToken, requestData.toString());
+                    System.out.println(requestData.toString());
+                    Response response = attendanceRequests.checkEnrollMultipleMembers(accessToken, requestData.toString(), meetingId);
 
+                    System.out.println(response.body().string());
                     if(response.isSuccessful()) {
                         CheckJoinedMembers.this.runOnUiThread(()-> {
                             Toast.makeText(CheckJoinedMembers.this, "Update checklist success", Toast.LENGTH_SHORT).show();
                             finish();
+                        });
+                    }
+                    else {
+                        CheckJoinedMembers.this.runOnUiThread(()-> {
+                            Toast.makeText(CheckJoinedMembers.this, "Fail to update checklist", Toast.LENGTH_SHORT).show();
                         });
                     }
                 }

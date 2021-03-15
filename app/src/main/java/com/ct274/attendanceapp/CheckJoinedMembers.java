@@ -41,6 +41,7 @@ public class CheckJoinedMembers extends AppCompatActivity {
     private String accessToken;
     private LoadingDialog loadingDialog;
     private String attendanceId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,10 +149,8 @@ public class CheckJoinedMembers extends AppCompatActivity {
                         dataJSON.put("user_id", enroll.getEnroller().getId());
                         requestData.put(dataJSON);
                     }
-                    System.out.println(requestData.toString());
                     Response response = attendanceRequests.checkEnrollMultipleMembers(accessToken, requestData.toString(), meetingId);
 
-                    System.out.println(response.body().string());
                     if(response.isSuccessful()) {
                         CheckJoinedMembers.this.runOnUiThread(()-> {
                             Toast.makeText(CheckJoinedMembers.this, "Update checklist success", Toast.LENGTH_SHORT).show();

@@ -60,7 +60,7 @@ public class AttendanceDetailFragment extends Fragment {
 
     private void requestCameraPermission() {
         if(ActivityCompat.checkSelfPermission(Objects.requireNonNull(getContext()), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-            startActivity(new Intent(getContext(), BarcodeScanActivity.class));
+            startBarcodeScanActivity();
         }
         else {
             ActivityCompat.requestPermissions(Objects.requireNonNull(getActivity()), new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
@@ -163,6 +163,15 @@ public class AttendanceDetailFragment extends Fragment {
         else {
             shareBtn.setVisibility(View.GONE);
         }
+
+        Button viewAttendButton = rootView.findViewById(R.id.view_attend_list);
+        viewAttendButton.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), ViewMeetingAttendList.class);
+            Bundle bundle =new Bundle();
+            bundle.putString("attendance_id", attendance.getId());
+            intent.putExtras(bundle);
+            startActivity(intent);
+        });
 
         return rootView;
     }

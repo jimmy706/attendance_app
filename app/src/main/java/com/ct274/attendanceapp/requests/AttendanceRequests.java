@@ -1,10 +1,18 @@
 package com.ct274.attendanceapp.requests;
 
+import android.os.Build;
+import android.util.Log;
+
+import androidx.annotation.RequiresApi;
+
 import com.ct274.attendanceapp.config.Endpoints;
+import com.ct274.attendanceapp.helpers.StringHandle;
 
 import org.json.JSONArray;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.FormBody;
@@ -18,10 +26,18 @@ public class AttendanceRequests {
     private static final MediaType JSON_TYPE
             = MediaType.parse("application/json; charset=utf-8");
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public Response listAttendance(String token, int page, int size) throws IOException {
         OkHttpClient client = new OkHttpClient();
+        Map<String, String> queryMap = new HashMap<>();
+        queryMap.put("page", Integer.toString(page));
+        queryMap.put("size", Integer.toString(size));
+
+        String url = Endpoints.API_URL + "attendances/list/?" + StringHandle.convertMapToQueryString(queryMap);
+        Log.i("Request URL: ", url);
+
         Request request = new Request.Builder()
-                .url(Endpoints.API_URL + "attendances/list/")
+                .url(url)
                 .addHeader("Authorization", "Bearer " + token)
                 .get()
                 .build();
@@ -113,4 +129,19 @@ public class AttendanceRequests {
 
         return client.newCall(request).execute();
     }
+
+    public Response attendMeetingViaUsername(String token, String username, String meetingId) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        RequestBody body = new FormBody.Builder()
+                .add("username", username)
+                .build();
+        Request request = new Request.Builder()
+                .url(Endpoints.API_URL + "attendances/add-join-member/" + meetingId + "/")
+                .addHeader("Authorization", "Bearer " + token)
+                .put(body)
+                .build();
+
+        return client.newCall(request).execute();
+    }
 }
+

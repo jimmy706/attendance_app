@@ -1,10 +1,12 @@
 package com.ct274.attendanceapp.helpers;
 
 import com.ct274.attendanceapp.models.Attendance;
+import com.ct274.attendanceapp.models.Enroll;
 import com.ct274.attendanceapp.models.User;
 import com.ct274.attendanceapp.models.UserProfile;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -35,5 +37,27 @@ public class HandleResponseData {
         }
 
         return results;
+    }
+
+    public ArrayList<Enroll> getMeetingMemberFromJSON(JSONArray jsonArray, String meetingId) throws JSONException {
+        ArrayList<Enroll> result = new ArrayList<>();
+
+        for(int i = 0; i < jsonArray.length(); i++) {
+            JSONObject enrollJSON = jsonArray.getJSONObject(i);
+            boolean isJoined = enrollJSON.getBoolean("joined");
+
+            JSONObject enrollerJSON = enrollJSON.getJSONObject("enroller");
+            String username = enrollerJSON.getString("username");
+            String first_name = enrollerJSON.getString("first_name");
+            String last_name = enrollerJSON.getString("last_name");
+            String email = enrollerJSON.getString("email");
+            String userId = enrollerJSON.getString("user_id");
+
+            User user = new User(userId, username, email, first_name, last_name);
+            Enroll enroll = new Enroll(user, meetingId, isJoined);
+            result.add(enroll);
+
+        }
+        return result;
     }
 }

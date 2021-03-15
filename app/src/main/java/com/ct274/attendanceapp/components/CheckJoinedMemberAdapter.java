@@ -26,12 +26,20 @@ public class CheckJoinedMemberAdapter extends ArrayAdapter<Enroll> {
     ArrayList<Enroll> enrolls;
     Context myContext;
     WatchCheckedListener watchCheckedListener;
+    private boolean readOnly = false;
 
     public CheckJoinedMemberAdapter(@NonNull Context context, ArrayList<Enroll> enrolls, WatchCheckedListener watchCheckedListener) {
         super(context, R.layout.member_check_joined_row, enrolls);
         this.myContext = context;
         this.enrolls = enrolls;
         this.watchCheckedListener = watchCheckedListener;
+    }
+
+    public CheckJoinedMemberAdapter(@NonNull Context context, ArrayList<Enroll> enrolls) {
+        super(context, R.layout.member_check_joined_row, enrolls);
+        this.myContext = context;
+        this.enrolls = enrolls;
+        this.readOnly = true;
     }
 
     private class ViewHolder {
@@ -58,10 +66,17 @@ public class CheckJoinedMemberAdapter extends ArrayAdapter<Enroll> {
 
         if(enroll != null) {
             CheckBox checkJoined = convertView.findViewById(R.id.check_joined);
+
+            if(readOnly) {
+                checkJoined.setEnabled(false);
+            }
+
             checkJoined.setChecked(enroll.isJoined());
             checkJoined.setOnClickListener(v -> {
                 boolean checked = ((CompoundButton) v).isChecked();
-                watchCheckedListener.onCheckChange(checked, enroll);
+                if(watchCheckedListener != null) {
+                    watchCheckedListener.onCheckChange(checked, enroll);
+                }
             });
             viewHolder.full_name.setText(enroll.getEnroller().getFirst_name() + " " + enroll.getEnroller().getLast_name());
             viewHolder.username.setText(enroll.getEnroller().getUsername());

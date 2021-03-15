@@ -121,7 +121,13 @@
                 android:id="@+id/join_attendance_btn"
                 android:layout_marginTop="15dp"
                 />
-
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/view_attend_list"
+                android:text="View attend list"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

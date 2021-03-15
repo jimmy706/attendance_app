@@ -9,8 +9,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RadioGroup;
@@ -37,9 +39,12 @@ import okhttp3.Response;
 public class Home extends AppCompatActivity {
     AttendanceAdapter attendanceAdapter;
     AttendanceRequests attendanceRequests = new AttendanceRequests();
-    private static int MEETING_ITEMS_SIZE = 10;
+    private static final int MEETING_ITEMS_SIZE = 7;
     ArrayList<Attendance> attendances = new ArrayList<>();
     ShimmerFrameLayout shimmerContainer;
+    boolean isLoadMore = false;
+    int currentPage = 1;
+    int numPage = 1;
 
     @SuppressLint("NonConstantResourceId")
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -91,7 +96,8 @@ public class Home extends AppCompatActivity {
                     attendances.clear();
                     attendanceAdapter.notifyDataSetChanged();
                     startLoading();
-                    getMeetingList(accessToken, 1);
+                    currentPage = 1;
+                    getMeetingList(accessToken, currentPage);
                     break;
                 case R.id.view_registered:
                     attendances.clear();
@@ -99,6 +105,22 @@ public class Home extends AppCompatActivity {
                     startLoading();
                     listRegisteredMeeting(accessToken);
                     break;
+            }
+        });
+
+        attendanceListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {}
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                final int lastItem = firstVisibleItem + visibleItemCount;
+                if(lastItem == totalItemCount && totalItemCount != 0 && !isLoadMore && currentPage < numPage) {
+                    isLoadMore = true;
+                    startLoading();
+                    currentPage += 1;
+                    getMeetingList(accessToken, currentPage);
+                }
             }
         });
     }
@@ -147,6 +169,9 @@ public class Home extends AppCompatActivity {
                 finally {
                     Home.this.runOnUiThread(()-> {
                         stopLoading();
+                        if(isLoadMore) {
+                            isLoadMore = false;
+                        }
                     });
                 }
             }
@@ -155,15 +180,18 @@ public class Home extends AppCompatActivity {
 
     private void getMeetingList(String token, int page) {
         new Thread(new Runnable() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void run() {
                 try {
                     Response response = attendanceRequests.listAttendance(token, page, MEETING_ITEMS_SIZE);
+                    String data = response.body().string();
+
                     if(response.isSuccessful()) {
-                        String data = response.body().string();
                         JSONObject jsonObject = new JSONObject(data);
                         JSONArray meetingsJSON = jsonObject.getJSONArray("results");
                         List<Attendance> results = new ArrayList<>();
+                        numPage = jsonObject.getInt("num_pages");
                         for(int i = 0; i < meetingsJSON.length(); i++) {
                             JSONObject jsonAttendance = meetingsJSON.getJSONObject(i);
                             String attendanceId = jsonAttendance.getString("id");

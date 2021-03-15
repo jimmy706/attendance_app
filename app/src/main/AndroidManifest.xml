@@ -18,7 +18,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AttendanceApp"
         android:usesCleartextTraffic="true">
-        <activity android:name=".CheckJoinedMembers"></activity>
+        <activity android:name=".ViewMeetingAttendList"></activity>
+        <activity android:name=".CheckJoinedMembers" />
         <activity android:name=".MyProfileActivity" />
         <activity android:name=".CreateMeetingActivity" />
         <activity android:name=".UserMenuActivity" />

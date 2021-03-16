@@ -23,10 +23,13 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ct274.attendanceapp.helpers.RequestPermission;
+import com.ct274.attendanceapp.models.User;
+import com.ct274.attendanceapp.requests.AttendanceRequests;
 import com.ct274.attendanceapp.states.UserState;
 import com.ct274.attendanceapp.ui.login.LoginActivity;
 import com.google.zxing.BarcodeFormat;
@@ -40,12 +43,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
 
-public class UserMenuActivity extends AppCompatActivity {
+import okhttp3.Response;
 
+public class UserMenuActivity extends AppCompatActivity {
+    private String accessToken;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_menu);
+
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.shared_tokens) ,Context.MODE_PRIVATE);
+        accessToken = sharedPreferences.getString(getString(R.string.access_token), "");
 
         ArrayList<String> options = new ArrayList<>(Arrays.asList(
                 "My profile",
@@ -155,12 +163,40 @@ public class UserMenuActivity extends AppCompatActivity {
         alertBuilder.setView(joinMeetingDialog);
         AlertDialog alertDialog = alertBuilder.create();
 
+        ProgressBar progressBar = joinMeetingDialog.findViewById(R.id.progress_bar);
         EditText joinKeyInput = joinMeetingDialog.findViewById(R.id.join_key);
         Button joinButton = joinMeetingDialog.findViewById(R.id.join_btn);
         joinButton.setOnClickListener(v -> {
             String joinKey = joinKeyInput.getText().toString();
-            Toast.makeText(context, joinKey, Toast.LENGTH_SHORT).show();
-            alertDialog.dismiss();
+            AttendanceRequests attendanceRequests = new AttendanceRequests();
+            joinButton.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Response response = attendanceRequests.joinMeetingWithKey(accessToken, joinKey);
+                        UserMenuActivity.this.runOnUiThread(()-> {
+                            if(response.isSuccessful()) {
+                                Toast.makeText(UserMenuActivity.this, "Join meeting success", Toast.LENGTH_LONG).show();
+                            }
+                            else {
+                                Toast.makeText(UserMenuActivity.this, "Join meeting failed", Toast.LENGTH_LONG).show();
+                            }
+                        });
+
+                    }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    finally {
+                        UserMenuActivity.this.runOnUiThread(()->{
+                            progressBar.setVisibility(View.GONE);
+                            alertDialog.dismiss();
+                        });
+                    }
+                }
+            }).start();
         });
 
         alertDialog.show();

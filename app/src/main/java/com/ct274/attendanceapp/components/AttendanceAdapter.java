@@ -3,6 +3,8 @@ package com.ct274.attendanceapp.components;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import com.ct274.attendanceapp.R;
 import com.ct274.attendanceapp.helpers.StringHandle;
@@ -46,6 +49,7 @@ public class AttendanceAdapter extends ArrayAdapter<Attendance>  {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @SuppressLint("ResourceAsColor")
     @NonNull
     @Override
@@ -73,8 +77,14 @@ public class AttendanceAdapter extends ArrayAdapter<Attendance>  {
         viewHolder.day.setText(StringHandle.formatDate(attendanceItem.getDay()));
         viewHolder.start_time.setText(attendanceItem.getStart_time());
         viewHolder.end_time.setText(attendanceItem.getEnd_time());
-        viewHolder.description.setText(attendanceItem.getDescription());
         viewHolder.username.setText(attendanceItem.getCreator().getAccount().getUsername());
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            viewHolder.description.setText(Html.fromHtml(attendanceItem.getDescription(),Html.FROM_HTML_MODE_COMPACT));
+        }
+        else {
+            viewHolder.description.setText(Html.fromHtml(attendanceItem.getDescription()));
+        }
+
         String avatarPath = "https://ui-avatars.com/api/?name=" + attendanceItem.getCreator().getFull_name() +  "&background=0D8ABC&color=fff&rounded=true";
         ToggleButton registerButton = convertView.findViewById(R.id.register_button);
 

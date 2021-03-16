@@ -8,12 +8,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -106,7 +108,12 @@ public class AttendanceDetailFragment extends Fragment {
 
         title.setText(attendance.getTitle());
         datetime.setText(attendance.getFormatDay() + ", " + attendance.getStart_time() + " - " + attendance.getEnd_time());
-        description.setText(attendance.getDescription());
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            description.setText(Html.fromHtml(attendance.getDescription(),Html.FROM_HTML_MODE_COMPACT));
+        }
+        else {
+            description.setText(Html.fromHtml(attendance.getDescription()));
+        }
         username.setText(attendance.getCreator().getAccount().getUsername());
         full_name.setText(attendance.getCreator().getFull_name());
         registerButton.setChecked(attendance.isRegistered());

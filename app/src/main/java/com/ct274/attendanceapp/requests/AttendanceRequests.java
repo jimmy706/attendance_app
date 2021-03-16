@@ -143,5 +143,18 @@ public class AttendanceRequests {
 
         return client.newCall(request).execute();
     }
+
+    public Response joinMeetingWithKey(String token, String key) throws IOException {
+        String url = "attendances/register-via-key/" + key +  "/";
+        OkHttpClient client = new OkHttpClient();
+        RequestBody body = new FormBody.Builder().build();
+        Request request = new Request.Builder()
+                .url(Endpoints.API_URL + url)
+                .addHeader("Authorization", "Bearer " + token)
+                .post(body)
+                .build();
+
+        return client.newCall(request).execute();
+    }
 }
 

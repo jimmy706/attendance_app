@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.ct274.attendanceapp.components.LoadingDialog;
 import com.ct274.attendanceapp.requests.AuthRequests;
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.shared_tokens) ,Context.MODE_PRIVATE);
         String rfToken = sharedPreferences.getString(getString(R.string.refresh_token), "");
         if(!rfToken.isEmpty()) {
-            LoadingDialog loadingDialog = new LoadingDialog(this, "Logging...");
+            loadingDialog = new LoadingDialog(this, "Logging...");
             loadingDialog.startLoadingDialog();
             getTokenAndLogin(rfToken);
         }
@@ -80,8 +81,15 @@ public class MainActivity extends AppCompatActivity {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    MainActivity.this.runOnUiThread(()-> {
+                        Toast.makeText(MainActivity.this, "Failed to logging", Toast.LENGTH_SHORT).show();
+                    });
                 }
-
+                finally {
+                    MainActivity.this.runOnUiThread(()->{
+                        loadingDialog.closeDialog();
+                    });
+                }
             }
         }).start();
     }

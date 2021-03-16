@@ -7,8 +7,10 @@ import androidx.annotation.RequiresApi;
 
 import com.ct274.attendanceapp.config.Endpoints;
 import com.ct274.attendanceapp.helpers.StringHandle;
+import com.ct274.attendanceapp.models.Attendance;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -154,6 +156,26 @@ public class AttendanceRequests {
                 .post(body)
                 .build();
 
+        return client.newCall(request).execute();
+    }
+
+    public Response createMeeting(String token, Attendance attendance) throws Exception {
+        OkHttpClient client = new OkHttpClient();
+
+
+
+        RequestBody body = new FormBody.Builder()
+                .add("title", attendance.getTitle())
+                .add("start_time", attendance.getStart_time())
+                .add("end_time", attendance.getEnd_time())
+                .add("day", attendance.getFormatDay("yyyy-MM-dd"))
+                .add("description", attendance.getDescription())
+                .build();
+        Request request = new Request.Builder()
+                .url(Endpoints.API_URL + "attendances/create-attendance/")
+                .addHeader("Authorization", "Bearer " + token)
+                .post(body)
+                .build();
         return client.newCall(request).execute();
     }
 }

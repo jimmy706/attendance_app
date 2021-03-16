@@ -61,6 +61,19 @@ public class Attendance {
         }
     }
 
+    public Attendance(String title, String start_time, String end_time, String day, String description) {
+        this.title = title;
+        this.start_time = start_time;
+        this.end_time = end_time;
+        this.description = description;
+        try{
+            this.day = getDate(day);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public String getId() {
         return id;
     }
@@ -101,6 +114,11 @@ public class Attendance {
         String pattern = "dd-MM-yyyy";
         @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
+        return simpleDateFormat.format(this.day);
+    }
+
+    public String getFormatDay(String pattern) {
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         return simpleDateFormat.format(this.day);
     }
 

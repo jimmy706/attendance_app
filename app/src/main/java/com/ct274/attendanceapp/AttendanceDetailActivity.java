@@ -57,7 +57,7 @@ public class AttendanceDetailActivity extends AppCompatActivity {
 
         ImageButton backBtn = findViewById(R.id.btn_back);
         backBtn.setOnClickListener(v -> {
-            finish();
+            startActivity(new Intent(AttendanceDetailActivity.this, Home.class));
         });
 
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.shared_tokens) , Context.MODE_PRIVATE);

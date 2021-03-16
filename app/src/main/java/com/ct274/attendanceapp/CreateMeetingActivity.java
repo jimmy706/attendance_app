@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -13,21 +16,36 @@ import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
+import com.ct274.attendanceapp.components.LoadingDialog;
 import com.ct274.attendanceapp.helpers.StringHandle;
+import com.ct274.attendanceapp.models.Attendance;
+import com.ct274.attendanceapp.requests.AttendanceRequests;
+
+import org.json.JSONObject;
 
 import java.util.Calendar;
 import java.util.Date;
 
-public class CreateMeetingActivity extends AppCompatActivity {
+import okhttp3.Response;
 
-    EditText dayInput, startTimeInput, endTimeInput, titleInput, descriptionInput;
+public class CreateMeetingActivity extends AppCompatActivity {
+    private LoadingDialog loadingDialog;
+    private EditText dayInput, startTimeInput, endTimeInput, titleInput, descriptionInput;
+    private String accessToken;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_meeting);
+
+        loadingDialog = new LoadingDialog(this, "Creating meeting...");
+
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.shared_tokens) , Context.MODE_PRIVATE);
+        accessToken = sharedPreferences.getString(getString(R.string.access_token), "");
+
         Calendar calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minus = calendar.get(Calendar.MINUTE);
@@ -135,12 +153,52 @@ public class CreateMeetingActivity extends AppCompatActivity {
                 String start_time = startTimeInput.getText().toString();
                 String end_time = endTimeInput.getText().toString();
                 String description = descriptionInput.getText().toString();
+
+                Attendance attendance = new Attendance( title, start_time, end_time, day, description);
+                loadingDialog.startLoadingDialog();
+                System.out.println(attendance);
+                AttendanceRequests attendanceRequests =  new AttendanceRequests();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Response response = attendanceRequests.createMeeting(accessToken, attendance);
+                            String data = response.body().string();
+                            System.out.println(data);
+                            if(response.isSuccessful()) {
+
+                                JSONObject jsonObject = new JSONObject(data);
+                                String meetingId = jsonObject.getString("id");
+
+                                CreateMeetingActivity.this.runOnUiThread(()->{
+                                    Toast.makeText(CreateMeetingActivity.this, "Create new activity success", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(CreateMeetingActivity.this, AttendanceDetailActivity.class);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("attendance_id", meetingId);
+                                    intent.putExtras(bundle);
+                                    startActivity(intent);
+                                });
+                            }
+                            else {
+                                CreateMeetingActivity.this.runOnUiThread(()->{
+                                    Toast.makeText(CreateMeetingActivity.this, "Failed to create new meeting", Toast.LENGTH_SHORT).show();
+                                });
+                            }
+                        }
+                        catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        finally {
+                            CreateMeetingActivity.this.runOnUiThread(()->loadingDialog.closeDialog());
+                        }
+                    }
+                }).start();
             }
         });
 
         ImageButton backBtn = findViewById(R.id.btn_back);
         backBtn.setOnClickListener(v ->  {
-            finish();
+            startActivity(new Intent(CreateMeetingActivity.this, Home.class));
         });
     }
 

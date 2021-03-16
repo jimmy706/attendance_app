@@ -70,7 +70,7 @@ public class UserMenuActivity extends AppCompatActivity {
 
         ImageButton btnBack = findViewById(R.id.btn_back);
         btnBack.setOnClickListener(v -> {
-            finish();
+            startActivity(new Intent(UserMenuActivity.this, Home.class));
         });
 
         TextView username = findViewById(R.id.username);

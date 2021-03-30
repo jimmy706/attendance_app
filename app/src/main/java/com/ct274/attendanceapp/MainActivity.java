@@ -3,6 +3,7 @@ package com.ct274.attendanceapp;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -83,6 +84,11 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                     MainActivity.this.runOnUiThread(()-> {
                         Toast.makeText(MainActivity.this, "Failed to logging", Toast.LENGTH_SHORT).show();
+                        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.shared_tokens), Context.MODE_PRIVATE);
+                        @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = sharedPref.edit();
+                        editor.remove(getString(R.string.access_token));
+                        editor.remove(getString(R.string.refresh_token));
+                        editor.apply();
                     });
                 }
                 finally {

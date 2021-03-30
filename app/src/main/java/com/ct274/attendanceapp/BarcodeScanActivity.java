@@ -30,6 +30,7 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.TimerTask;
 
 import okhttp3.Response;
 
@@ -150,7 +151,12 @@ public class BarcodeScanActivity extends AppCompatActivity {
                             }
                             finally {
                                 BarcodeScanActivity.this.runOnUiThread(()->loadingDialog.closeDialog());
-                                allowScan = true;
+                                new java.util.Timer().schedule(new TimerTask() {
+                                    @Override
+                                    public void run() {
+                                        allowScan = true;
+                                    }
+                                }, 500);
                                 try {
                                     cameraSource.start(surfaceView.getHolder());
                                 } catch (Exception e) {

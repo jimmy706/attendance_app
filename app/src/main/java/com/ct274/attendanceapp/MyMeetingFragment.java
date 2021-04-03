@@ -91,6 +91,7 @@ public class MyMeetingFragment extends Fragment {
                             String description = JSONAttendance.getString("description");
                             String start_time = JSONAttendance.getString("start_time");
                             String end_time = JSONAttendance.getString("end_time");
+                            String location = JSONAttendance.getString("location");
                             String day = JSONAttendance.getString("day");
                             String title = JSONAttendance.getString("title");
                             boolean is_registered = JSONAttendance.getBoolean("is_registed");
@@ -98,7 +99,7 @@ public class MyMeetingFragment extends Fragment {
                             UserState userState = UserState.getInstance();
                             User user = new User(userState.getId(), userState.getUsername(), userState.getEmail(), userState.getFirst_name(), userState.getLast_name());
                             UserProfile userProfile = new UserProfile(user, userState.getFirst_name() + " " + userState.getLast_name(), userState.getMajor(), userState.getDescription());
-                            Attendance attendance = new Attendance(attendanceId,title,start_time,end_time,day,description,userProfile);
+                            Attendance attendance = new Attendance(attendanceId,title,start_time,end_time,day,description, location,userProfile);
                             attendance.setRegistered(is_registered);
                             attendance.setHost(true);
                             results.add(attendance);

@@ -98,6 +98,8 @@ public class AttendanceDetailFragment extends Fragment {
         TextView description = rootView.findViewById(R.id.description);
         TextView username = rootView.findViewById(R.id.username);
         TextView full_name = rootView.findViewById(R.id.full_name);
+        TextView locationText = rootView.findViewById(R.id.location);
+
         ToggleButton registerButton = rootView.findViewById(R.id.register_button);
         String imagePath = "https://ui-avatars.com/api/?name=" + attendance.getCreator().getFull_name() +  "&background=0D8ABC&color=fff&rounded=true";
         CircleImageView avatar = rootView.findViewById(R.id.avatar);
@@ -117,6 +119,14 @@ public class AttendanceDetailFragment extends Fragment {
         username.setText(attendance.getCreator().getAccount().getUsername());
         full_name.setText(attendance.getCreator().getFull_name());
         registerButton.setChecked(attendance.isRegistered());
+        String location = attendance.getLocation();
+        if(location != null && !location.isEmpty()) {
+            rootView.findViewById(R.id.location_wrapper).setVisibility(View.VISIBLE);
+            locationText.setText(location);
+        }
+        else {
+            rootView.findViewById(R.id.location_wrapper).setVisibility(View.GONE);
+        }
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(getString(R.string.shared_tokens) , Context.MODE_PRIVATE);
         accessToken = sharedPreferences.getString(getString(R.string.access_token), "");

@@ -144,6 +144,7 @@ public class Home extends AppCompatActivity {
                             String end_time = jsonAttendance.getString("end_time");
                             String day = jsonAttendance.getString("day");
                             String title = jsonAttendance.getString("title");
+                            String location = jsonAttendance.getString("location");
                             JSONObject creatorJSON = jsonAttendance.getJSONObject("creator");
                             JSONObject userJSON = creatorJSON.getJSONObject("account");
                             String username = userJSON.getString("username");
@@ -152,7 +153,7 @@ public class Home extends AppCompatActivity {
 
                             User user = new User(username, "", first_name, last_name);
                             UserProfile userProfile = new UserProfile(user, first_name + " " + last_name, "", "");
-                            Attendance attendance = new Attendance(attendanceId, title, start_time, end_time, day,description, userProfile);
+                            Attendance attendance = new Attendance(attendanceId, title, start_time, end_time, day,description, location, userProfile);
                             attendance.setRegistered(true);
                             results.add(attendance);
                         }
@@ -186,7 +187,6 @@ public class Home extends AppCompatActivity {
                 try {
                     Response response = attendanceRequests.listAttendance(token, page, MEETING_ITEMS_SIZE);
                     String data = response.body().string();
-
                     if(response.isSuccessful()) {
                         JSONObject jsonObject = new JSONObject(data);
                         JSONArray meetingsJSON = jsonObject.getJSONArray("results");
@@ -199,6 +199,7 @@ public class Home extends AppCompatActivity {
                             String start_time = jsonAttendance.getString("start_time");
                             String end_time = jsonAttendance.getString("end_time");
                             String day = jsonAttendance.getString("day");
+                            String location = jsonAttendance.getString("location");
                             boolean isRegistered = jsonAttendance.getBoolean("is_registered");
                             String title = jsonAttendance.getString("title");
                             JSONObject creatorJSON = jsonAttendance.getJSONObject("creator");
@@ -209,7 +210,7 @@ public class Home extends AppCompatActivity {
 
                             User user = new User(username, "", first_name, last_name);
                             UserProfile userProfile = new UserProfile(user, first_name + " " + last_name, "", "");
-                            Attendance attendance = new Attendance(attendanceId, title, start_time, end_time, day,description, userProfile);
+                            Attendance attendance = new Attendance(attendanceId, title, start_time, end_time, day,description, location, userProfile);
                             attendance.setRegistered(isRegistered);
                             results.add(attendance);
                         }

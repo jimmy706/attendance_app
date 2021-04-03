@@ -162,20 +162,35 @@ public class AttendanceRequests {
     public Response createMeeting(String token, Attendance attendance) throws Exception {
         OkHttpClient client = new OkHttpClient();
 
-
-
         RequestBody body = new FormBody.Builder()
                 .add("title", attendance.getTitle())
                 .add("start_time", attendance.getStart_time())
                 .add("end_time", attendance.getEnd_time())
                 .add("day", attendance.getFormatDay("yyyy-MM-dd"))
                 .add("description", attendance.getDescription())
+                .add("location", attendance.getLocation())
                 .build();
         Request request = new Request.Builder()
                 .url(Endpoints.API_URL + "attendances/create-attendance/")
                 .addHeader("Authorization", "Bearer " + token)
                 .post(body)
                 .build();
+        return client.newCall(request).execute();
+    }
+
+    public Response removeMemberFromMeeting(String token, String user_id, String meetingId) throws IOException{
+        OkHttpClient client = new OkHttpClient();
+
+        RequestBody body = new FormBody.Builder()
+                .add("user_id", user_id)
+                .build();
+
+        Request request = new Request.Builder()
+                .url(Endpoints.API_URL + "attendances/remove-member/" + meetingId + "/")
+                .addHeader("Authorization", "Bearer " + token)
+                .post(body)
+                .build();
+
         return client.newCall(request).execute();
     }
 }

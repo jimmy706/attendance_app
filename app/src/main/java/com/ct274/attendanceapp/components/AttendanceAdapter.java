@@ -44,7 +44,7 @@ public class AttendanceAdapter extends ArrayAdapter<Attendance>  {
 
 
     private static class ViewHolder {
-        TextView title, day, start_time, end_time, description, username;
+        TextView title, day, start_time, end_time, description, username, location;
         CircleImageView avatar;
     }
 
@@ -66,6 +66,7 @@ public class AttendanceAdapter extends ArrayAdapter<Attendance>  {
             viewHolder.description = convertView.findViewById(R.id.description);
             viewHolder.username = convertView.findViewById(R.id.username);
             viewHolder.avatar = convertView.findViewById(R.id.creator_avatar);
+            viewHolder.location = convertView.findViewById(R.id.location);
             convertView.setTag(viewHolder);
         }
         else {
@@ -78,6 +79,15 @@ public class AttendanceAdapter extends ArrayAdapter<Attendance>  {
         viewHolder.start_time.setText(attendanceItem.getStart_time());
         viewHolder.end_time.setText(attendanceItem.getEnd_time());
         viewHolder.username.setText(attendanceItem.getCreator().getAccount().getUsername());
+        String location = attendanceItem.getLocation();
+        System.out.println(location);
+        if(location != null && !location.isEmpty()) {
+            convertView.findViewById(R.id.location_wrapper).setVisibility(View.VISIBLE);
+            viewHolder.location.setText(location);
+        }
+        else {
+            convertView.findViewById(R.id.location_wrapper).setVisibility(View.GONE);
+        }
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             viewHolder.description.setText(Html.fromHtml(attendanceItem.getDescription(),Html.FROM_HTML_MODE_COMPACT));
         }

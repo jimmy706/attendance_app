@@ -32,7 +32,7 @@ import okhttp3.Response;
 
 public class CreateMeetingActivity extends AppCompatActivity {
     private LoadingDialog loadingDialog;
-    private EditText dayInput, startTimeInput, endTimeInput, titleInput, descriptionInput;
+    private EditText dayInput, startTimeInput, endTimeInput, titleInput, descriptionInput, locationInput;
     private String accessToken;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -55,7 +55,7 @@ public class CreateMeetingActivity extends AppCompatActivity {
         endTimeInput = findViewById(R.id.input_end_time);
         titleInput = findViewById(R.id.input_title);
         descriptionInput = findViewById(R.id.input_description);
-
+        locationInput = findViewById(R.id.location);
         dayInput.setText(StringHandle.formatDate(new Date()));
 
 
@@ -153,8 +153,8 @@ public class CreateMeetingActivity extends AppCompatActivity {
                 String start_time = startTimeInput.getText().toString();
                 String end_time = endTimeInput.getText().toString();
                 String description = descriptionInput.getText().toString();
-
-                Attendance attendance = new Attendance( title, start_time, end_time, day, description);
+                String location = locationInput.getText().toString();
+                Attendance attendance = new Attendance( title, start_time, end_time, day, description, location);
                 loadingDialog.startLoadingDialog();
                 System.out.println(attendance);
                 AttendanceRequests attendanceRequests =  new AttendanceRequests();

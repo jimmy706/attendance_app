@@ -84,6 +84,7 @@ public class AttendanceDetailActivity extends AppCompatActivity {
                         String end_time = jsonData.getString("end_time");
                         String day = jsonData.getString("day");
                         String title = jsonData.getString("title");
+                        String location = jsonData.getString("location");
                         boolean is_registered = jsonData.getBoolean("is_registered");
                         boolean is_host = jsonData.getBoolean("is_host");
                         String attendance_key = jsonData.getString("attendance_key");
@@ -114,6 +115,7 @@ public class AttendanceDetailActivity extends AppCompatActivity {
                         attendanceDetail.setRegistered(is_registered);
                         attendanceDetail.setHost(is_host);
                         attendanceDetail.setShareKey(attendance_key);
+                        attendanceDetail.setLocation(location);
 
                         AttendanceDetailActivity.this.runOnUiThread(()-> {
                             AttendanceDetailFragment attendanceDetailFragment = new AttendanceDetailFragment(attendanceDetail);

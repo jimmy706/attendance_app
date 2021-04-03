@@ -74,7 +74,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
         >
         <LinearLayout
             android:layout_width="wrap_content"
@@ -92,13 +91,14 @@
                 android:text="2021-02-22"
                 android:textSize="13sp"
                 android:id="@+id/day"
+                android:textColor="#434343"
+                android:textStyle="bold"
                 />
         </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="5dp"
             android:layout_alignParentRight="true"
             >
             <ImageView
@@ -113,7 +113,9 @@
                 android:text="14:00"
                 android:gravity="center"
                 android:id="@+id/start_time"
-                android:textSize="13sp"/>
+                android:textSize="13sp"
+                android:textColor="#434343"
+                android:textStyle="bold"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -122,16 +124,41 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:textSize="13sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:textColor="#434343"
+                />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="16:00"
                 android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="#434343"
                 android:id="@+id/end_time"/>
         </LinearLayout>
     </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="5dp"
+        android:orientation="horizontal"
+        android:id="@+id/location_wrapper">
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/location_icon"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginLeft="5dp"
+            android:id="@+id/location"
+            android:textColor="#848581"
+            android:text="Dai hoc Can Tho"/>
+    </LinearLayout>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

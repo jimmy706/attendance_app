@@ -22,6 +22,7 @@ public class Attendance {
     boolean isRegistered = false;
     boolean isHost = false;
     String shareKey;
+    String location;
 
     private Date getDate(String date) throws ParseException {
         String pattern = "yyyy-MM-dd";
@@ -43,9 +44,10 @@ public class Attendance {
         catch (Exception e) {
             e.printStackTrace();
         }
+        this.location = "";
     }
 
-    public Attendance(String id, String title, String start_time, String end_time, String day, String description, UserProfile creator) {
+    public Attendance(String id, String title, String start_time, String end_time, String day, String description, String location, UserProfile creator) {
         this.id = id;
         this.title = title;
         this.start_time = start_time;
@@ -59,9 +61,10 @@ public class Attendance {
         catch (Exception e) {
             e.printStackTrace();
         }
+        this.location = location;
     }
 
-    public Attendance(String title, String start_time, String end_time, String day, String description) {
+    public Attendance(String title, String start_time, String end_time, String day, String description, String location) {
         this.title = title;
         this.start_time = start_time;
         this.end_time = end_time;
@@ -72,6 +75,7 @@ public class Attendance {
         catch (Exception e) {
             e.printStackTrace();
         }
+        this.location = location;
     }
 
     public String getId() {
@@ -172,6 +176,14 @@ public class Attendance {
 
     public void setShareKey(String shareKey) {
         this.shareKey = shareKey;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     @Override

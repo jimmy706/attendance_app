@@ -20,6 +20,7 @@ public class HandleResponseData {
             String attendanceId = jsonAttendance.getString("attendance_id");
             String description = jsonAttendance.getString("description");
             String start_time = jsonAttendance.getString("start_time");
+            String location = jsonAttendance.getString("location");
             String end_time = jsonAttendance.getString("end_time");
             String day = jsonAttendance.getString("day");
             String title = jsonAttendance.getString("title");
@@ -31,7 +32,7 @@ public class HandleResponseData {
 
             User user = new User(username, "", first_name, last_name);
             UserProfile userProfile = new UserProfile(user, first_name + " " + last_name, "", "");
-            Attendance attendance = new Attendance(attendanceId, title, start_time, end_time, day,description, userProfile);
+            Attendance attendance = new Attendance(attendanceId, title, start_time, end_time, day,description, location, userProfile);
             attendance.setRegistered(true);
             results.add(attendance);
         }

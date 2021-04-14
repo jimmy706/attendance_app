@@ -39,6 +39,8 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.oned.Code128Writer;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
@@ -176,14 +178,25 @@ public class UserMenuActivity extends AppCompatActivity {
                 public void run() {
                     try {
                         Response response = attendanceRequests.joinMeetingWithKey(accessToken, joinKey);
-                        UserMenuActivity.this.runOnUiThread(()-> {
-                            if(response.isSuccessful()) {
-                                Toast.makeText(UserMenuActivity.this, "Join meeting success", Toast.LENGTH_LONG).show();
-                            }
-                            else {
-                                Toast.makeText(UserMenuActivity.this, "Join meeting failed", Toast.LENGTH_LONG).show();
-                            }
-                        });
+                        String data = response.body().string();
+                        JSONObject jsonObject = new JSONObject(data);
+                        if(response.isSuccessful()) {
+                            String meetingId = jsonObject.getString("id");
+
+                            UserMenuActivity.this.runOnUiThread(()-> {
+                                    Toast.makeText(UserMenuActivity.this, "Join meeting success", Toast.LENGTH_LONG).show();
+                                    Intent intent = new Intent(UserMenuActivity.this, AttendanceDetailActivity.class);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("attendance_id", meetingId);
+                                    intent.putExtras(bundle);
+                                    startActivity(intent);
+                            });
+                        }
+                       else {
+                           UserMenuActivity.this.runOnUiThread(()-> {
+                               Toast.makeText(UserMenuActivity.this, "Join meeting failed", Toast.LENGTH_LONG).show();
+                           });
+                        }
 
                     }
                     catch (Exception e) {

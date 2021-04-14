@@ -137,13 +137,18 @@ public class AttendanceAdapter extends ArrayAdapter<Attendance>  {
     }
 
     private void leaveMeeting(String token, String id) {
-        try {
-            Response response = attendanceRequests.requestLeaveMeeting(token, id);
-            System.out.println(response.body().string());
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+       new Thread(new Runnable() {
+           @Override
+           public void run() {
+               try {
+                   Response response = attendanceRequests.requestLeaveMeeting(token, id);
+                   System.out.println(response.body().string());
+               }
+               catch (Exception e) {
+                   e.printStackTrace();
+               }
+           }
+       }).start();
     }
 
 }

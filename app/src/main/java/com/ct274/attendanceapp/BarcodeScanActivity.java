@@ -156,7 +156,7 @@ public class BarcodeScanActivity extends AppCompatActivity {
                                     public void run() {
                                         allowScan = true;
                                     }
-                                }, 500);
+                                }, 1500);
                                 try {
                                     cameraSource.start(surfaceView.getHolder());
                                 } catch (Exception e) {
